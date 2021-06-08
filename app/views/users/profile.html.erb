@@ -1,0 +1,18 @@
+<h1><%=@user.first_name%> Profile</h1>
+<% @user.posts.each do |post| %>
+  <p> <%= post.caption %> </p>
+  <p> <%= post.image %> </p>
+  <p> <%= post.posted_time %> </p>
+  <p> <%= post.is_public %> </p>
+  <ul>
+    <li><%=link_to "Show Post", user_post_path(user_id: @user, id: post.id) %></li>
+  </ul>
+<%end%>
+
+<ul>
+    <li><%=link_to "Create Post", new_user_post_path(@user)%></li></br></br>
+    <li><%= link_to "Home", user_path(current_user)+'/home'%></li>
+    <li><%= link_to @user.first_name+" Info", user_path(@user)%></li>
+</ul>
+
+<%= button_to "Send Request", action: "invite" %>

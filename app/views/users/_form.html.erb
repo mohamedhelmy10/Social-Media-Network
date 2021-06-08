@@ -1,0 +1,94 @@
+<%= form_with model: user do |form| %>
+    <div>
+      <%= form.label :first_name %></br>
+      <%= form.text_field :first_name %></br>
+      <% user.errors.full_messages_for(:first_name).each do |message| %>
+        <div><%= message %></div>
+      <% end %>
+    </div>
+  
+    <div>
+      <%= form.label :last_name %></br>
+      <%= form.text_field  :last_name %> </br>
+      <% user.errors.full_messages_for(:last_name).each do |message| %>
+        <div><%= message %></div>
+      <% end %>
+    </div>
+
+  <div> 
+    <%= form.label :password %></br>
+    <%= form.text_field :password %></br>
+    <% user.errors.full_messages_for(:password).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :email %></br>
+    <%= form.text_field  :email %> </br>
+    <% user.errors.full_messages_for(:email).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :phone_number %></br>
+    <%= form.text_field :phone_number %></br>
+    <% user.errors.full_messages_for(:phone_number).each do |message| %>
+     <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :gender %></br>
+    <%= form.text_field :gender %></br>
+    <% user.errors.full_messages_for(:gender).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :birthdate %></br>
+    <%= form.text_field :birthdate %></br>
+    <% user.errors.full_messages_for(:birthdate).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :profile_picture %></br>
+    <%= form.text_field :profile_picture %></br>
+    <% user.errors.full_messages_for(:profile_picture).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :hometown %></br>
+    <%= form.text_field :hometown %></br>
+    <% user.errors.full_messages_for(:hometown).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :marital_status %></br>
+    <%= form.text_field :marital_status %></br>
+    <% user.errors.full_messages_for(:marital_status).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div> 
+    <%= form.label :about_me %></br>
+    <%= form.text_field :about_me %></br>
+    <% user.errors.full_messages_for(:about_me).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div></br></br>
+
+  
+    <div>
+      <%= form.submit %>
+    </div>
+  <% end %>

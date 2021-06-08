@@ -1,0 +1,10 @@
+<h1>Post Content</h1>
+<p>Caption: <%= @post.caption%></p>
+<p>Image: <%= @post.image%></p>
+<p>Posted Time: <%= @post.posted_time%></p>
+<p>Public: <%= @post.is_public%></p>
+<ul>
+    <li><%= link_to "Profile", user_path(@user)+"/posts"%></li>
+    <li><%= link_to "Edit Post", user_path(@user)+"/posts/"+@post.id.to_s+"/edit"%></li>
+    <li><%= link_to 'Delete Post', [@post.user, @post], method: :delete, data: { confirm: "Are you sure?" } %></li> 
+</ul>

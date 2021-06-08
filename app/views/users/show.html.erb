@@ -1,0 +1,19 @@
+<h1><%= @user.first_name %> Info</h1>
+
+<p>First Name: <%= @user.first_name %></p>
+<p>Last Name: <%= @user.last_name %></p>
+<p>Email: <%= @user.email %></p>
+<p>Phone Number: <%= @user.phone_number %></p>
+<p>Gender: <%= @user.gender %></p>
+<p>Birth Date: <%= @user.birthdate %></p>
+<p>Profile Picture: <%= @user.profile_picture %></p>
+<p>Home Town: <%= @user.hometown %></p>
+<p>Marital Status: <%= @user.marital_status %></p>
+<p>About Me: <%= @user.about_me %></p>
+
+<ul>
+  <li><%= link_to "Edit", edit_user_path(@user) %></li>
+  <li><%= link_to "Delete User", user_path(@user),method: :delete, data: { confirm: "Are you sure?" } %></li>
+  <li><%= link_to "Profile", user_posts_path(@user)%></li>
+  <li><%= link_to "Home", user_path(@user)+'/home'%></li>
+</ul>

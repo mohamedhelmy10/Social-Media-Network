@@ -1,0 +1,19 @@
+<h1><%=@user.first_name%> Home Page</h1>
+<% @users.each do |user| %>
+  <% user.posts.each do |post| %>
+    <p> <%= post.caption %> </p>
+    <p> <%= post.image %> </p>
+    <p> <%= post.posted_time %> </p>
+    <p> <%= post.is_public %> </p>
+    <ul>
+        <li><%=link_to "Show Post", user_post_path(user_id: user, id: post.id) %></li>
+        <li><%=link_to user.first_name+" Profile", user_path(post.user_id)+'/profile' %></li>
+    </ul>
+  <%end%>
+<%end%>
+
+<ul>
+    <li><%=link_to "Create Post", new_user_post_path(@user)%></li></br></br>
+    <li><%=link_to "Profile", user_path(@user)+'/profile'%></li>
+    <li><%= link_to "Log out", session_path(@user),method: :delete %></li>
+</ul>
