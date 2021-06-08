@@ -21,7 +21,7 @@ class PostsController < ApplicationController
     end   
 
     def show
-        if logged_in? && current_user.id.to_s == params[:user_id]
+        if logged_in?
             @user = User.find(params[:user_id])
             @post =Post.find(params[:id])
         else
@@ -30,19 +30,20 @@ class PostsController < ApplicationController
     end
 
     def edit
-        if logged_in? && current_user.id.to_s == params[:user_id]
-            @user = User.find(params[:user_id])
-            @post =@user.posts.find(params[:id])
-        else
-            redirect_to root_path  
+        @post = Post.find(params[:id])
+        if !logged_in? || current_user.id.to_s != params[:user_id]
+            redirect_to user_path(current_user)+"/home" 
         end       
     end
 
-    def destroy
+    def destroy 
         @user = User.find(params[:user_id])
-        @post =@user.posts.find(params[:id])
-        @post.destroy
-        redirect_to user_posts_path(@user)
+        if logged_in? && current_user.id.to_s == params[:user_id]
+            @post =Post.find(params[:id])
+            @post.destroy
+        end
+        redirect_to user_path(current_user)+"/home"
+        
     end
 
     def update
