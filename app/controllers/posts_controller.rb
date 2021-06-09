@@ -14,7 +14,7 @@ class PostsController < ApplicationController
         if logged_in? && current_user.id.to_s == params[:user_id]
             @user = User.find(params[:user_id])
             @user.posts.create(post_params)
-            redirect_to user_path(@user)+"/home"
+            redirect_to users_path
         else
             redirect_to root_path  
         end  
@@ -32,7 +32,7 @@ class PostsController < ApplicationController
     def edit
         @post = Post.find(params[:id])
         if !logged_in? || current_user.id.to_s != params[:user_id]
-            redirect_to user_path(current_user)+"/home" 
+            redirect_to users_path
         end       
     end
 
@@ -42,7 +42,7 @@ class PostsController < ApplicationController
             @post =Post.find(params[:id])
             @post.destroy
         end
-        redirect_to user_path(current_user)+"/home"
+        redirect_to users_path
         
     end
 

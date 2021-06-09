@@ -15,5 +15,7 @@
 <ul>
     <li><%=link_to "Create Post", new_user_post_path(@user)%></li></br></br>
     <li><%=link_to "Profile", user_path(@user)+'/profile'%></li></br></br>
-    <li><%= link_to "Log out", session_path(@user),method: :delete %></li>  
+    <li><%= link_to "Log out", session_path(@user),method: :delete %></li> </br>
+    <li><%= link_to "Friend Requests", invitations_path%></li> </br>
+    <li><%= link_to "Friends", invitations_path+"/friends"%></li> </br>
 </ul>

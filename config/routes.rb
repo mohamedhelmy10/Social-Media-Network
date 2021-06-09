@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'users#index'
-  resources :sessions, only: [:create , :new , :destroy]
+  resources :sessions, only: [:create, :new, :destroy]
+  resources :invitations, only: [:index, :create, :update, :destroy]
   get '/users/:id/home', to: 'users#home'
   get '/users/:id/profile', to: 'users#profile'
-  post '/users/:id/invite', to: 'users#invite'
+  get '/invitations/friends', to: 'invitations#friends'
   
   resources :users do
-    resources :posts
+    resources :posts do
+      resources :comments
+    end
   end
+  
 end

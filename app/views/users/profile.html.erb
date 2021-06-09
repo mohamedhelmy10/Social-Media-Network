@@ -11,8 +11,8 @@
 
 <ul>
     <li><%=link_to "Create Post", new_user_post_path(@user)%></li></br></br>
-    <li><%= link_to "Home", user_path(current_user)+'/home'%></li>
-    <li><%= link_to @user.first_name+" Info", user_path(@user)%></li>
+    <li><%= link_to "Home", users_path%></li>
+    <li><%= link_to @user.first_name+" Info", user_path(@user)%></li></br></br>
+    <li><%= link_to "Log out", session_path(@user),method: :delete %></li>  
+    <li><%= link_to "Send Request", invitations_path, method: :post %></li>  
 </ul>
-
-<%= button_to "Send Request", action: "invite" %>

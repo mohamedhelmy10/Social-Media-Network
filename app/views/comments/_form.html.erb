@@ -1,0 +1,9 @@
+<%= form_with model: [user ,post, user.posts.find(post.id).comments.build ] do |form| %>
+    <p>
+      <%= form.label :comment %><br>
+      <%= form.text_area :body %>
+    </p>
+    <p>
+      <%= form.submit %>
+    </p>
+  <% end %>

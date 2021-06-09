@@ -15,5 +15,5 @@
   <li><%= link_to "Edit", edit_user_path(@user) %></li>
   <li><%= link_to "Delete User", user_path(@user),method: :delete, data: { confirm: "Are you sure?" } %></li>
   <li><%= link_to "Profile", user_posts_path(@user)%></li>
-  <li><%= link_to "Home", user_path(@user)+'/home'%></li>
+  <li><%= link_to "Home", users_path %></li>
 </ul>

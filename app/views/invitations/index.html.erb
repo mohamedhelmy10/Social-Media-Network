@@ -1,0 +1,9 @@
+<h1><%=current_user.first_name%> Received Requests</h1>
+<% @received_requests.each do |request| %>
+    <ul>
+        <% user = request.user%>
+        <li><%=link_to user.first_name, user_path(user)+"/profile" %></li>
+        <li><%=link_to "Accept", invitation_path(request),method: :put %></li>
+        <li><%= link_to "Remove", invitation_path(request),method: :delete%></li>
+    </ul>
+<%end%>

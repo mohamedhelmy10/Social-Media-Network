@@ -3,6 +3,7 @@ class User < ApplicationRecord
     has_many :posts
     has_many :invitations
     has_many :friends, class_name: 'Invitation', foreign_key: 'friend_id'
+    has_many :comments
     validates :email , presence: true
     validates :first_name , presence: true
     validates :last_name , presence: true

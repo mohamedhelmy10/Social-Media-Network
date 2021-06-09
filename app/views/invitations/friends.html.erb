@@ -1,0 +1,12 @@
+<h1><%=current_user.first_name%> Friends</h1>
+<% @friends.each do |my_friend| %>
+    <ul>
+        <%if my_friend.user_id == current_user.id%> 
+            <%user = my_friend.friend%>
+        <%else%>
+            <%user = my_friend.user%>   
+        <%end%>
+        <li><%=link_to user.first_name, user_path(user)+"/profile"%></li></br>
+
+    </ul>
+<%end%>
