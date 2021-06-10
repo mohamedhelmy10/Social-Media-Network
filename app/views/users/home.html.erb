@@ -11,6 +11,7 @@
             <strong> <%= comment.user.first_name %> Comment:</strong>
             <%= comment.body %>
             <%=link_to "Edit Comment", edit_user_post_comment_path(user_id: user, post_id: post.id, id:comment.id) %>
+            <%=link_to "Delete Comment", user_post_comment_path(user_id: user, post_id: post.id, id:comment.id), method: :delete, data: { confirm: "Are you sure?" } %>
           </p>
        <%end%>
       <ul>

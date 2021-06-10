@@ -38,8 +38,9 @@ class CommentsController < ApplicationController
         if logged_in?
             @post = Post.find(params[:post_id])
             @comment = Comment.find(params[:id])
-            if  (params[user_id] == @post.user_id or @comment.user_id) # post owner or comment owner only can edit
+            if current_user.id == params[:user_id] or current_user.id == @comment.user_id  # post owner or comment owner only can edit
                 @comment.update(comment_params)
+                redirect_to user_path(current_user)+"/home"
             end
         else
             redirect_to  new_session_path 
@@ -50,8 +51,9 @@ class CommentsController < ApplicationController
         if logged_in?
             @post = Post.find(params[:post_id])
             @comment = Comment.find(params[:id])
-            if (params[user_id] == @post.user_id or @comment.user_id) # post owner or comment owner only can delete
-            @comment.destroy
+            if current_user.id == params[:user_id] or current_user.id == @comment.user_id # post owner or comment owner only can delete
+                @comment.destroy
+                redirect_to user_path(current_user)+"/home"
             end
         else
             redirect_to  new_session_path
@@ -62,3 +64,4 @@ class CommentsController < ApplicationController
         params.require(:comment).permit(:body) 
     end
  end
+ 
