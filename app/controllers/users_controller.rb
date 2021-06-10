@@ -9,7 +9,7 @@
         @users = User.all
         @user = User.find(params[:id])
       else
-        redirect_to root_path  
+        redirect_to  new_session_path  
       end
     end
 
@@ -17,7 +17,7 @@
       if logged_in?
         @user = User.find(params[:id])
       else
-        redirect_to root_path
+        redirect_to  new_session_path 
       end
     end
 
@@ -40,7 +40,7 @@
       if logged_in? && current_user.id.to_s == params[:id]
         @user = User.find(params[:id])
       else
-        redirect_to root_path
+        redirect_to  new_session_path 
       end
     end
 
@@ -48,7 +48,7 @@
       if logged_in? && current_user.id.to_s == params[:id]
         @user = User.find(params[:id])
       else
-        redirect_to root_path
+        redirect_to  new_session_path 
       end
     end
 
@@ -61,7 +61,7 @@
           render :edit 
         end
       else
-        redirect_to root_path
+        redirect_to  new_session_path 
       end
     end
 
@@ -70,7 +70,7 @@
         @user = User.find(params[:id])
         @user.destroy
       end
-      redirect_to root_path
+      redirect_to  new_session_path 
     end
 
 

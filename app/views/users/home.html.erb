@@ -1,20 +1,31 @@
 <h1><%=@user.first_name%> Home Page</h1>
 <% @users.each do |user| %>
   <% user.posts.each do |post| %>
-    <p> <%= post.caption %> </p>
-    <p> <%= post.image %> </p>
-    <p> <%= post.posted_time %> </p>
-    <p> <%= post.is_public %> </p>
-    <ul>
-        <li><%=link_to "Show Post", user_post_path(user_id: user, id: post.id) %></li>
-        <li><%=link_to user.first_name+" Profile", user_path(post.user_id)+'/profile' %></li>
-    </ul>
+    <% if User.are_friends? current_user.id , user.id or post.is_public %>
+      <p> <%= post.caption %> </p>
+      <p> <%= post.image %> </p>
+      <p> <%= post.posted_time %> </p>
+      <p> <%= post.is_public %> </p>
+        <% post.comments.each do |comment| %>
+          <p>
+            <strong> <%= comment.user.first_name %> Comment:</strong>
+            <%= comment.body %>
+            <%=link_to "Edit Comment", edit_user_post_comment_path(user_id: user, post_id: post.id, id:comment.id) %>
+          </p>
+       <%end%>
+      <ul>
+          <li><%=link_to "Show Post", user_post_path(user_id: user, id: post.id) %></li>
+          <li><%=link_to "Edit Post", edit_user_post_path(user_id: user, id: post.id)  %></li>
+          <li><%=link_to "Add Comment", new_user_post_comment_path(user_id: user, post_id: post.id) %></li>
+          <li><%=link_to user.first_name+" Profile", user_path(post.user_id)+'/profile' %></li>
+      </ul>
+    <%end%>
   <%end%>
 <%end%>
 
 <ul>
-    <li><%=link_to "Create Post", new_user_post_path(@user)%></li></br></br>
-    <li><%=link_to "Profile", user_path(@user)+'/profile'%></li></br></br>
+    <li><%=link_to "Create Post", new_user_post_path(@user)%></li></br>
+    <li><%=link_to "Profile", user_path(@user)+'/profile'%></li></br>
     <li><%= link_to "Log out", session_path(@user),method: :delete %></li> </br>
     <li><%= link_to "Friend Requests", invitations_path%></li> </br>
     <li><%= link_to "Friends", invitations_path+"/friends"%></li> </br>

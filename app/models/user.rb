@@ -12,6 +12,14 @@ class User < ApplicationRecord
     def self.are_friends?(id1, id2)
         case1 = !Invitation.where(user_id: id1, friend_id: id2, status: "accepted").empty?
         case2 = !Invitation.where(user_id: id2, friend_id: id1, status: "accepted").empty?
-        case1 || case2
+        case3 = (id1==id2)
+        case1 || case2 || case3
     end
+    
+    def self.my_friends(id)
+        friends1 = Invitation.where(user_id: id, status: "accepted")
+        friends2 = Invitation.where(friend_id: id, status: "accepted")
+        friends = [friends1,friends2]
+    end
+
 end
