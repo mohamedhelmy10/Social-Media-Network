@@ -1,76 +1,90 @@
   class UsersController < ApplicationController
     protect_from_forgery prepend: true
-    def index
-    end
+    #before_action :authorized, except: [:create, :login]
+
+  def index
+    @users = User.all
+    render json: @users
+  end
 
 
-    def home
-      if logged_in? && current_user.id.to_s == params[:id]
-        @users = User.all
-        @user = User.find(params[:id])
+  # REGISTER
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      if @user.valid?
+        token = encode_token({user_id: @user.id})
+        render json: {user: @user, token: token}
       else
-        redirect_to  new_session_path  
+        render json: {error: "Invalid username or password"}
       end
+    else
+      render json: @user.errors, status: :unprocessable_entity
     end
+  end
 
-    def profile
-      if logged_in?
-        @user = User.find(params[:id])
+  # LOGGING IN
+  def login
+    begin
+      @user = User.find_by(email: params[:email])
+      if @user.authenticate(params[:password])
+        token = encode_token({user_id: @user.id})
+        render json: {user: @user, token: token}
       else
-        redirect_to  new_session_path 
+        render json: {error: "Invalid password"}
       end
+    rescue
+      render json: {error: "Invalid email"}
+      return
     end
+  end
 
-    def new 
-      @user = User.new
-    end 
+  #Auto Login
+  def auto_login
+    render json: @user
+  end
+  
 
-    def create
-
-      @user = User.new(user_params)
-      if @user.save
-        session[:user_id] = @user.id
-        redirect_to user_path(@user)+'/home'
-      else
-        render :new
-      end
+  def show
+    begin
+      @user = User.find(params[:id])
+      render json: @user
+    rescue ActiveRecord::RecordNotFound
+      render json: {error: "This user does not exist"} 
+      return
     end
+  end
 
-    def show
-      if logged_in? && current_user.id.to_s == params[:id]
-        @user = User.find(params[:id])
-      else
-        redirect_to  new_session_path 
-      end
-    end
-
-    def edit 
-      if logged_in? && current_user.id.to_s == params[:id]
-        @user = User.find(params[:id])
-      else
-        redirect_to  new_session_path 
-      end
-    end
-
-    def update
-      if logged_in? && current_user.id.to_s == params[:id]
-        @user = User.find(params[:id])
+  def update
+    begin
+      @user = User.find(params[:id])
+      if 2 == @user.id 
         if @user.update(user_params)
-          redirect_to @user
+            render json: @user
         else
-          render :edit 
+          render json: @user.errors, status: :unprocessable_entity
         end
       else
-        redirect_to  new_session_path 
+        render json: {error: "You can not update another user info"} 
       end
-    end
+    rescue ActiveRecord::RecordNotFound
+      render json: {error: "This user does not exist"} 
+      return
+    end     
+  end
 
     def destroy
-      if logged_in? && current_user.id.to_s == params[:id]
+      begin
         @user = User.find(params[:id])
-        @user.destroy
-      end
-      redirect_to  new_session_path 
+        if current_user.id == @user.id
+          @user.destroy
+        else
+          render json: {error: "You can not delete another user"}
+        end
+      rescue ActiveRecord::RecordNotFound
+        render json: {error: "This user does not exist"} 
+        return
+      end   
     end
 
 

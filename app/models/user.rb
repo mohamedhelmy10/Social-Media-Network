@@ -1,13 +1,14 @@
 class User < ApplicationRecord
     has_secure_password
-    has_many :posts
-    has_many :invitations
-    has_many :friends, class_name: 'Invitation', foreign_key: 'friend_id'
-    has_many :comments
-    validates :email , presence: true
+    has_many :posts, :dependent => :destroy
+    has_many :invitations, :dependent => :destroy
+    has_many :friends, class_name: 'Invitation', foreign_key: 'friend_id', :dependent => :destroy
+    has_many :reactions, :dependent => :destroy
+    has_many :comments, :dependent => :destroy
+    has_many :notifications, :dependent => :destroy
+    validates :email , presence: true, uniqueness: true
     validates :first_name , presence: true
     validates :last_name , presence: true
-    validates :email , uniqueness: true
 
     def self.are_friends?(id1, id2)
         case1 = !Invitation.where(user_id: id1, friend_id: id2, status: "accepted").empty?

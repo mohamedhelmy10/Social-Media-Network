@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_09_091809) do
+ActiveRecord::Schema.define(version: 2021_06_12_111639) do
 
   create_table "comments", force: :cascade do |t|
     t.text "body"
@@ -39,6 +39,16 @@ ActiveRecord::Schema.define(version: 2021_06_09_091809) do
     t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "description"
+    t.integer "user_id"
+    t.integer "post_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_notifications_on_post_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.text "caption"
     t.string "image"
@@ -48,6 +58,16 @@ ActiveRecord::Schema.define(version: 2021_06_09_091809) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "reactions", force: :cascade do |t|
+    t.string "reaction_type"
+    t.integer "user_id"
+    t.integer "post_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_reactions_on_post_id"
+    t.index ["user_id"], name: "index_reactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
