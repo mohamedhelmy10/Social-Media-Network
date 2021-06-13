@@ -1,5 +1,8 @@
 {
   "name": "social_network",
   "private": true,
-  "dependencies": {}
+  "proxy": "http://localhost:3000",
+  "dependencies": {
+    "cwd": "^0.10.0"
+  }
 }

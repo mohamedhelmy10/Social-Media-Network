@@ -1,4 +1,4 @@
-  class UsersController < ApplicationController
+  class API::V1::UsersController < ApplicationController
     protect_from_forgery prepend: true
     #before_action :authorized, except: [:create, :login]
 
