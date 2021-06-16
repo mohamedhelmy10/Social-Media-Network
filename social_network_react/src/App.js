@@ -6,7 +6,7 @@ import { Navbar } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 
 // Views 
-import Home from './views/Home.js';
+import Home from './views/Welcome.js';
 import SignUp from './views/SignUp.js';
 import LogIn from './views/LogIn.js';
 

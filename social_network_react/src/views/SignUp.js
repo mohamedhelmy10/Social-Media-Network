@@ -27,22 +27,21 @@ class SignUp extends Component{
 
         this.setState(prevState => {
             let user = Object.assign({}, prevState.user);
-            user[event.target.name] = event.target.value;               
+            user[event.target.name] = event.target.value; 
+            user.gender=true;
+            user.marital_status=false;
+            user.birthdate= "2001-01-01";
+            user.profile_picture= "image.png";
             return { user };                                
         })
       }
 
       handleSubmit= (e)=> {
         e.preventDefault()
-        //const user =this.state.user
-
         axios.post('http://localhost:3000/api/v1/users', this.state.user)
         .then((response) => {
-            //console.log(this.state.user);
-            console.log(response);
-          }, (error) => {
-            console.log(error);
-        })
+            console.log(response.data);
+          })
         .catch(error => {
             this.setState({ errorMessage: error.message });
             console.error('There was an error!', error);

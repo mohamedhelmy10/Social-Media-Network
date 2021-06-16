@@ -10,7 +10,6 @@
 
   # REGISTER
   def create
-    puts "here"
     @user = User.new(user_params)
     if @user.save
       if @user.valid?
