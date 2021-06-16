@@ -1,4 +1,4 @@
-  class API::V1::UsersController < ApplicationController
+  class UsersController < ApplicationController
     protect_from_forgery prepend: true
     #before_action :authorized, except: [:create, :login]
 
@@ -10,6 +10,7 @@
 
   # REGISTER
   def create
+    puts "here"
     @user = User.new(user_params)
     if @user.save
       if @user.valid?

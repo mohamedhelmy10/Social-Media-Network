@@ -1,7 +1,10 @@
 {
   "name": "social_network",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "proxy": {
+  "/api/v1": {
+  "target": "http://localhost:3000"}
+   },
   "dependencies": {
     "cwd": "^0.10.0"
   }

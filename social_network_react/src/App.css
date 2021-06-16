@@ -1,38 +1,151 @@
-.App {
+
+ul.taskList {
+	padding: 0 25px;
+}
+
+li.task {
+	list-style-type: none;
+	font-family: Tahoma;
+	font-size: 1.2em;
+	padding: 10px 0;
+	border-bottom: 1px solid #ccc;
+}
+
+li.task:hover .deleteTaskBtn {
+	visibility: visible;
+	opacity: 1;
+}
+
+input.taskCheckbox {
+	position: relative;
+	float: left;
+	margin-right: 10px;
+	-webkit-appearance: none;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	outline: none;
+	margin-left: 5px;
+	text-align: center;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+input.taskCheckbox:checked:after {
+	color: green;
+	content: "\2713";
+	display: block;
+	font-size: 17px;
+	height: 17px;
+	position: absolute;
+	width: 17px;
+	left: 0.5px;
+	bottom: 2px;
+}
+
+input.taskCheckbox + label.taskLabel {
+	color: black;
+}
+
+input.taskCheckbox:checked + label.taskLabel {
+	text-decoration: line-through;
+	color: #656565;
+}
+
+input[placeholder] {
+	font-size: 1.1em;
+}
+
+.container {
+	width: fit-content;
+  height: fit-content;
+	margin: 10px;
+	border-radius: 5px;
+  background-color: rgb(0, 122, 112);
+  display: table;
+}
+
+.header {
+	color: black;
+	padding: 5px;
+	text-align: center;
+	font-family: Tahoma, sans-serif;
+}
+
+.inputContainer {
+	padding: 15px;
+}
+
+.inputContainer .taskInput {
+	padding: 10px;
+	width: 100%;
+	border-radius: 25px;
+	box-sizing: border-box;
+}
+
+.listWrapper {
+	position: absolute;
+	bottom: 50px;
+	top: 160px;
+	right: 0;
+	left: 0;
+	overflow: auto;
+}
+
+.deleteTaskBtn {
+	float: right;
+	color: red;
+	background: rgba(0,0,0,0);
+	font-size: 20px;
+	font-weight: bold;
+	border: 1px solid white;
+	border-radius: 50%;
+	padding: 10px 5px;
+	visibility: hidden;
+	opacity: 0;
+	line-height: 0;
+	margin-right: 5px;
+	cursor: default;
+}
+.navigationBar {
+  text-align: right;
+  background-color: rgb(0, 122, 112); 
+	width: 100%;
+  height: 20%;
+}
+
+.navigationBarContainer {
+  margin: 10 px;
+  background-color: rgb(0, 122, 112);
+	width: 100%;
+  height: 50px;
+}
+.title{
+  text-align: center;
+  padding: 50px;
+  color: rgb(75, 14, 39);
+}
+.backgroundImage{
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#basic-navbar-nav{
+  background-color: rgb(0, 122, 112);
+}
+#about{
+  min-height: 50px;
+  padding-bottom: 10px;
+}
+.side{
+  height: 100%;
+  width: 30%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 122, 112);
+  padding-top: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logInForm{
+  background-color: rgb(0, 122, 112);
 }
