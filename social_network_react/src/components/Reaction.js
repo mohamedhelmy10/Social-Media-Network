@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Nav , Row, Col} from "react-bootstrap";
 
-class Reaction extends Component{
+ class Reaction extends Component{
     constructor(props) {
         super(props)
     }
