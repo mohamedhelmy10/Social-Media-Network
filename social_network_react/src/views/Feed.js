@@ -2,32 +2,34 @@ import React, { Component } from 'react';
 import { Button } from "react-bootstrap";
 import axios from 'axios';
 import Post from '../components/Post.js';
-import  HomeBar from './homeBar.js';
-import Comments from './Comments.js';
-import {getPosts} from '../api/posts.js';
-class Home extends Component{
+
+class Feed extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            postsAndUsers: []
+            posts: []
         }
     }
+    getPosts() {
+        axios.get('http://localhost:3000/api/v1/users/'+this.props.userId+'/posts')
+        .then(response => {
+          this.setState({posts: response.data});
+          console.log(this.state.posts);
+        })
+        .catch(error => console.log(error))
+      }
     
     componentDidMount() {
-        getPosts.call(this);
+        this.getPosts();
     }
 
     renderPost() {
-        return this.state.postsAndUsers.map((postAndUser, index) => (
-            <div>
-                <Post key={index} post={postAndUser.post} user={postAndUser.user}/>
-            </div>
+        return this.state.posts.map((post, index) => (
+            <Post key={index} post={post}/>
         ));
     }
     render(){
         return (
-            <div>
-                <HomeBar/>
             <div className="col-md-4">
                 <div className="col-md-5">
                     <div className="form-area">  
@@ -42,9 +44,8 @@ class Home extends Component{
                 </div>
                 {this.renderPost()}
             </div>
-            </div>
         );
     }
 }
 
-export default Home;
+export default Feed;

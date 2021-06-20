@@ -4,9 +4,13 @@ class InvitationsController < ApplicationController
 
     def index
         begin
+            @friend_requests = []
             @user = User.find(params[:user_id])
             # return all the friend requests sent to me
             @received_requests = @user.friends.where("status = ?", "pending")
+            @received_requests.each do |request|
+                @friend_requests.push User.find(request.user_id)
+            end
             render json: @received_requests
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist"} 
@@ -61,11 +65,21 @@ class InvitationsController < ApplicationController
 
     def friends
         begin
+            @my_friends = []
             @user = User.find(params[:user_id]) # Current user
+            #friends who sent requests to me
             @friends1 = @user.friends.where("status = ?", "accepted")
+            #friends who i sent requests to them
             @friends2 = @user.invitations.where("status = ?", "accepted")
             @friends = @friends1+@friends2
-            render json: @friends
+
+            @friends1.each do |friend|
+                @my_friends.push User.find(friend.user_id)
+            end 
+            @friends2.each do |friend|
+                @my_friends.push User.find(friend.friend_id)
+            end 
+            render json: @my_friends
         rescue  ActiveRecord::RecordNotFound
             render json: {error: "This user does not exist"} 
             return
