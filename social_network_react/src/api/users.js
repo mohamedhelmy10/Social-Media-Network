@@ -26,7 +26,7 @@ export function userLogin() {
         else{
             setCurrentUser(response.data.user);
             localStorage.setItem('currUserId', response.data.user.id);
-            this.setState({ redirect: "/"+response.data.user.id+"/home" });
+            this.setState({ redirect: "/home" });
             this.forceUpdate();
         }
       })

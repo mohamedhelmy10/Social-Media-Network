@@ -12,6 +12,7 @@ import SignUp from './views/SignUp.js';
 import LogIn from './views/LogIn.js';
 import Home from './views/Home.js';
 import Profile from './views/Profile.js';
+import MyProfile from './views/MyProfile.js';
 import Friends from './views/Friends.js';
 import FriendRequests from './views/FriendRequests.js';
 import Comments from './views/Comments.js';
@@ -27,12 +28,13 @@ class App extends Component {
               <Route exact path="/" component={Welcome} />
               <Route path="/sign-up" component={SignUp} />
               <Route path="/log-in" component={LogIn} />
-              <Route path="/:currUserId/home" component={Home} />
-              <Route path="/:currUserId/profile/:userId" component={Profile} />
-              <Route path="/:currUserId/friends" component={Friends} />
-              <Route path="/:currUserId/friendRequests" component={FriendRequests} />
-              <Route path="/:currUserId/posts/:postId/comments" component={Comments} />
-              <Route path="/:currUserId/posts/:postId/reactions" component={Reactions} />
+              <Route path="/home" component={Home} />
+              <Route path="/profile/:profileId" component={Profile} />
+              <Route path="/profile" component={MyProfile} />
+              <Route path="/friends" component={Friends} />
+              <Route path="/friendRequests" component={FriendRequests} />
+              <Route path="/posts/:postId/comments" component={Comments} />
+              <Route path="/posts/:postId/reactions" component={Reactions} />
             </Switch>
           </Router>
         </React.StrictMode>

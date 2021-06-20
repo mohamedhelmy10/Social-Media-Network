@@ -8,7 +8,12 @@ class Reaction extends Component{
     
     render(){
         const currUserId = localStorage.getItem('currUserId');
-        const profilePath = "/"+currUserId+"/profile/"+this.props.user.id;
+        var profilePath;
+        if (currUserId == this.props.friend.id)
+             profilePath = "/profile";
+        else
+             profilePath = "/profile/"+this.props.friend.id;
+
         const userName = this.props.user.first_name+" "+this.props.user.last_name;
         return (   
             <div> 
