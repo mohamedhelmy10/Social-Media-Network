@@ -8,7 +8,12 @@ class Friend extends Component{
     
     render(){
         const currUserId = localStorage.getItem('currUserId');
-        const profilePath = "/"+currUserId+"/profile/"+this.props.friend.id;
+        var profilePath;
+        if (currUserId == this.props.friend.id)
+             profilePath = "/profile";
+        else
+             profilePath = "/profile/"+this.props.friend.id;
+
         const userName = this.props.friend.first_name+" "+this.props.friend.last_name;
         return (   
 

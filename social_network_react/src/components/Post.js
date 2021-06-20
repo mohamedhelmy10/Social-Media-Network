@@ -21,10 +21,15 @@ class Post extends Component{
     
     render(){
         const currUserId = localStorage.getItem('currUserId');
-        const profilePath = "/"+currUserId+"/profile/"+this.props.user.id;
+        var profilePath;
+        if (currUserId == this.props.user.id)
+             profilePath = "/profile";
+        else
+            profilePath = "/profile/"+this.props.user.id;
+
         const userName = this.props.user.first_name+" "+this.props.user.last_name;
-        const commentsPath = "/"+currUserId+"/posts/"+this.props.post.id+"/comments";
-        const reactionsPath = "/"+currUserId+"/posts/"+this.props.post.id+"/reactions";
+        const commentsPath = "/posts/"+this.props.post.id+"/comments";
+        const reactionsPath = "/posts/"+this.props.post.id+"/reactions";
         if (this.state.redirect) {
             return(
                 <div>
