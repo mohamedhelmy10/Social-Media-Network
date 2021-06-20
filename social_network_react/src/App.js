@@ -17,7 +17,7 @@ import Friends from './views/Friends.js';
 import FriendRequests from './views/FriendRequests.js';
 import Comments from './views/Comments.js';
 import Reactions from './views/Reactions.js';
-class App extends Component {
+ class App extends Component {
   render() {
     return (
       <div className="container" fluid="true">
