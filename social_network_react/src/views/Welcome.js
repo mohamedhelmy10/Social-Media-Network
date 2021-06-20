@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Image } from "react-bootstrap";
-
+import Bar from './Bar.js';
 
 class Welcome extends Component{
  render(){
      return(
+         <div>
+             <Bar/>
     <div className = "welcome">
         <div className = "title">       
             <h1 >Welcome In Friends Network</h1>
@@ -24,6 +26,7 @@ class Welcome extends Component{
             </div>
         </div>
 
+    </div>
     </div>
     )
   }

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import axios from 'axios'
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
+import { createUser } from '../api/users.js'; 
 
 class SignUp extends Component{
     constructor(props) {
@@ -19,7 +21,9 @@ class SignUp extends Component{
               hometown: '',
               marital_status: false,
               about_me: ''
-          }
+          },
+          redirect: null
+
         }
       }
     
@@ -28,27 +32,28 @@ class SignUp extends Component{
         this.setState(prevState => {
             let user = Object.assign({}, prevState.user);
             user[event.target.name] = event.target.value; 
-            user.gender=true;
-            user.marital_status=false;
-            user.birthdate= "2001-01-01";
-            user.profile_picture= "image.png";
             return { user };                                
         })
       }
 
       handleSubmit= (e)=> {
         e.preventDefault()
-        axios.post('http://localhost:3000/api/v1/users', this.state.user)
-        .then((response) => {
-            console.log(response.data);
-          })
-        .catch(error => {
-            this.setState({ errorMessage: error.message });
-            console.error('There was an error!', error);
-        });
+        createUser.call(this)
+
       }
     render(){
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            )
+            
+        }
         return (
+            <div>
+                 <Bar/>
             <Form onSubmit={this.handleSubmit}>
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>First Name</Form.Label>
@@ -113,6 +118,7 @@ class SignUp extends Component{
                     Sign up
                 </Button> 
             </Form>
+            </div>
         )
     }
 }

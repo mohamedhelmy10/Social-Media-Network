@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Button } from "react-bootstrap";
-import axios from 'axios';
+import axios from 'axios'
 import Post from '../components/Post.js';
 import  HomeBar from './homeBar.js';
-import Comments from './Comments.js';
-import {getPosts} from '../api/posts.js';
-class Home extends Component{
+import {getProfilePosts} from '../api/posts.js';
+class Profile extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            postsAndUsers: []
+            postsAndUser: []
         }
     }
-    
+
     componentDidMount() {
-        getPosts.call(this);
+        const userId = this.props.match.params.userId;
+        getProfilePosts.call(this, userId);
     }
 
     renderPost() {
-        return this.state.postsAndUsers.map((postAndUser, index) => (
-            <div>
-                <Post key={index} post={postAndUser.post} user={postAndUser.user}/>
-            </div>
+        const user = this.state.postsAndUser[0];
+        return this.state.postsAndUser.map((post, index) => (
+                (index !=0)&&
+                <div>
+                    <Post key={index} post={post} user = {user}/>
+                </div>
         ));
     }
     render(){
@@ -47,4 +49,4 @@ class Home extends Component{
     }
 }
 
-export default Home;
+export default Profile;

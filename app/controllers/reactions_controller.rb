@@ -3,11 +3,16 @@ class ReactionsController < ApplicationController
     #before_action :authorized
     def index 
         begin
+            @reactions_users = []
             @post = Post.find(params[:post_id])
             # the post must be public or the owner of the post is my friend
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @reactions = @post.reactions
-                render json: @reactions
+                puts "here"
+                @reactions.each do |reaction|
+                    @reactions_users.push({reaction: reaction, user: reaction.user})
+                end
+                render json: @reactions_users
             else
                 render json: {error: "You can not see reactions of this post as the post is private"} 
             end

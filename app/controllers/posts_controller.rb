@@ -9,10 +9,10 @@ class PostsController < ApplicationController
 
         @posts.each do |post|
             # check if the current user and post owner are friends or the post is public
-            if User.are_friends? params[:user_id], post.user_id or post.is_public 
-                @allowed_posts.push post
+            if User.are_friends? params[:user_id].to_i, post.user_id or post.is_public 
+                @allowed_posts.push ({post: post, user: post.user})
             end
-        end
+        end 
         render json: @allowed_posts.reverse
     end
 
@@ -22,10 +22,11 @@ class PostsController < ApplicationController
             @user = User.find(params[:id])
             @posts = []
             @user.posts.each do |post|
-                if User.are_friends?  params[:user_id] , @user.id or post.is_public
+                if User.are_friends?  params[:user_id].to_i , @user.id or post.is_public
                     @posts.push post
                 end
             end
+            @posts.push @user
             render json: @posts.reverse
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist"} 
