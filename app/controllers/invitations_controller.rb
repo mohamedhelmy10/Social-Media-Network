@@ -9,9 +9,9 @@ class InvitationsController < ApplicationController
             # return all the friend requests sent to me
             @received_requests = @user.friends.where("status = ?", "pending")
             @received_requests.each do |request|
-                @friend_requests.push User.find(request.user_id)
+                @friend_requests.push ({user:User.find(request.user_id), invitation:{id:request.id}})
             end
-            render json: @received_requests
+            render json: @friend_requests
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist"} 
             return
@@ -20,15 +20,23 @@ class InvitationsController < ApplicationController
 
     def create
         begin
-            @invitation = Invitation.find_by(user_id: 2 , friend_id: params[:user_id]) ||
-            Invitation.find_by(user_id:  params[:user_id] , friend_id: 2)
-            if @invitation[:status] == "accepted"
-                render json: {error: "Already friends"}
+            @invitation = Invitation.find_by(user_id:  params[:user_id].to_i , friend_id: params[:friend_id].to_i)||
+             Invitation.find_by(user_id: params[:friend_id].to_i, friend_id: params[:user_id].to_i )
+             if @invitation
+                if @invitation[:status] == "accepted"
+                    render json: {error: "Already friends"}
+                elsif @invitation[:status] == "pending" and @invitation.user_id == params[:user_id].to_i
+                    render json: {error: "Already sent"}
+                else
+                    render json: {error: "You have friend request from this user"}
+                end
             else
-                render json: {error: "Already sent"}
+                @sent_request = Invitation.new(user_id: params[:user_id].to_i, friend_id: params[:friend_id].to_i, status: "pending")
+                @sent_request.save # the current user sent friend request to another user
+                render json: @sent_request
             end
         rescue ActiveRecord::RecordNotFound
-            @sent_request = Invitation.new(user_id: current_user.id, friend_id: params[:user_id], status: "pending")
+            @sent_request = Invitation.new(user_id: params[:user_id].to_i, friend_id: params[:friend_id].to_i, status: "pending")
             @sent_request.save # the current user sent friend request to another user
             render json: @sent_request
         end
@@ -52,11 +60,7 @@ class InvitationsController < ApplicationController
     def destroy
         begin
             @removed_request = Invitation.find(params[:id])
-            if @removed_request.destroy
-                redirect_to user_invitations_path(current_user.id)
-            else
-                render json: @friend_request.errors, status: :unprocessable_entity
-            end
+            @removed_request.destroy
         rescue ActiveRecord::RecordNotFound
             render json: {error: "This friend request does not exist to remove"} 
             return
@@ -74,10 +78,10 @@ class InvitationsController < ApplicationController
             @friends = @friends1+@friends2
 
             @friends1.each do |friend|
-                @my_friends.push User.find(friend.user_id)
+                @my_friends.push ({user:User.find(friend.user_id), invitation:{id: friend.id}})
             end 
             @friends2.each do |friend|
-                @my_friends.push User.find(friend.friend_id)
+                @my_friends.push ({user:User.find(friend.user_id), invitation:{id: friend.id}})
             end 
             render json: @my_friends
         rescue  ActiveRecord::RecordNotFound

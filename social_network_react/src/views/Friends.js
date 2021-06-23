@@ -16,9 +16,10 @@ class Friends extends Component{
     }
 
     renderFriend() {
+        console.log(this.state.friends);
         return this.state.friends.map((friend, index) => (
             <div>
-                <Friend key={index} friend={friend}/>
+                <Friend key={index} friend={friend.user} invitation={friend.invitation}/>
             </div>
         ));
     }
