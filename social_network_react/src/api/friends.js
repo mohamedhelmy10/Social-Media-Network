@@ -3,8 +3,12 @@ import axios from 'axios';
 export function getFriends() {
     const currUserId = localStorage.getItem('currUserId');
     axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/friends')
-    .then(response => {
-      this.setState({friends: response.data});
+    .then((response) => {
+      if (response.data.error)
+          alert(response.data.error);
+      else{
+        this.setState({friends: response.data});
+      }
     })
     .catch(error => console.log(error));
 }
@@ -12,9 +16,66 @@ export function getFriends() {
 export function getRequests() {
     const currUserId = localStorage.getItem('currUserId');
     axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations')
-    .then(response => {
-      this.setState({requests: response.data});
-      console.log(this.state.requests);
+    .then((response) => {
+      if (response.data.error)
+          alert(response.data.error);
+      else{
+        this.setState({requests: response.data});
+      }
     })
     .catch(error => console.log(error));
+
+}
+export function removeRequestOrFriend(invitationId) {
+  const currUserId = localStorage.getItem('currUserId');
+  axios.delete('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+invitationId)
+  .then((response) => {
+    if (response.data.error)
+        alert(response.data.error);
+    else{
+      const path = window.location.pathname; 
+      this.setState({ redirect: path }); 
+      this.forceUpdate();
+    }
+  })
+.catch(error => {
+    this.setState({ errorMessage: error.message });
+    console.error('There was an error!', error);
+});
+}
+
+export function acceptFriendRequest(invitationId) {
+  const currUserId = localStorage.getItem('currUserId');
+  axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+invitationId)
+  .then((response) => {
+    if (response.data.error)
+        alert(response.data.error);
+    else{
+      const path = window.location.pathname; 
+      this.setState({ redirect: path }); 
+      this.forceUpdate();
+    }
+  })
+  .catch(error => {
+    this.setState({ errorMessage: error.message });
+    console.error('There was an error!', error);
+  });
+}
+
+export function sendFriendRequest(friendId) {
+  const currUserId = localStorage.getItem('currUserId');
+  axios.post('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId)
+  .then((response) => {
+    if (response.data.error)
+        alert(response.data.error);
+    else{
+      const path = window.location.pathname; 
+      this.setState({ redirect: path }); 
+      this.forceUpdate();
+    }
+  })
+  .catch(error => {
+    this.setState({ errorMessage: error.message });
+    console.error('There was an error!', error);
+  });
 }

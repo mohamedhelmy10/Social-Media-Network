@@ -152,4 +152,56 @@ input[placeholder] {
 .nav-link{
     font-family: 'Roboto', sans-serif;
     color: #000000 !important;
+	border-width: .1em;  
+	border-style: solid; 
+	margin: 10px;
   }
+
+.posts{
+	width: 50%;
+	border-width: .2em;  
+	border-style: solid; 
+	margin: 20px;
+	padding: auto;	
+	position: center;
+}
+
+.content{  
+	border-color: rgb(0, 0, 0);  
+	border-width: .1em;  
+	border-style: solid; 
+	margin: 10px;
+	position: center;
+} 
+.buttonsList{
+
+	margin: 10px; 
+}
+.reaction{
+	width: 60%;
+	border-color: rgb(0, 0, 0);  
+	border-width: .15em;  
+	border-style: solid; 
+	margin: 10px;
+	position: center;
+}
+.button{
+	margin: 10px;
+	position: center;
+}
+
+.comment{
+	width: 50%;
+	border-color: rgb(0, 0, 0);  
+	border-width: .15em;  
+	border-style: solid; 
+	margin: 10px;
+	position: center;
+}
+.userName{
+	width: 30%;
+}
+.data{
+	margin: 5px;
+	text-align: center;
+}
