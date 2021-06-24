@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_12_111639) do
+ActiveRecord::Schema.define(version: 2021_06_24_105407) do
 
   create_table "comments", force: :cascade do |t|
     t.text "body"
@@ -31,12 +31,11 @@ ActiveRecord::Schema.define(version: 2021_06_12_111639) do
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "friend_id"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_invitations_on_user_id"
+    t.integer "sender_id"
+    t.integer "receiver_id"
   end
 
   create_table "notifications", force: :cascade do |t|

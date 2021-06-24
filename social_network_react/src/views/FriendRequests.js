@@ -19,7 +19,7 @@ class FriendRequests extends Component{
         console.log(this.state.requests);   
         return this.state.requests.map((request, index) => (
             <div>
-                <FriendRequest key={index} friend={request.user} invitation={request.invitation}/>
+                <FriendRequest key={index} friend={request}/>
             </div>
         ));
     }

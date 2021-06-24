@@ -22,13 +22,13 @@ class Comment extends Component{
     }
     handleEditClick= (e)=> {
         e.preventDefault();
-        this.state.redirect = "/posts/"+ this.props.comment.post_id + "/comments/"+this.props.comment.id;
-        this.forceUpdate();
+        const path = "/posts/"+ this.props.comment.post_id + "/comments/"+this.props.comment.id;
+        this.setState({redirect: path});    
     }
 
     render(){
         if (this.state.redirect) {
-            console.log("here");
+            console.log(this.state.redirect);
             return(
                 <div>
                     <Redirect to={this.state.redirect} />

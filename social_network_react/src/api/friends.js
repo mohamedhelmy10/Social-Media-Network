@@ -28,7 +28,7 @@ export function getRequests() {
 }
 export function removeRequestOrFriend(invitationId) {
   const currUserId = localStorage.getItem('currUserId');
-  axios.delete('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+invitationId)
+  axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+invitationId)
   .then((response) => {
     if (response.data.error)
         alert(response.data.error);

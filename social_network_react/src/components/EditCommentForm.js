@@ -21,14 +21,14 @@ class EditCommentForm extends Component{
         })
     }
     handleSubmit= (e)=> {
-        e.preventDefault()
+        e.preventDefault();
         updateComment.call(this, this.state.comment);
     }
     componentDidMount(){
-        console.log("here");
         const postId = this.props.match.params.postId;
         const commentId = this.props.match.params.commentId;
         getComment.call(this, postId, commentId);
+        console.log(this.state.comment);
     }
     
     render(){
