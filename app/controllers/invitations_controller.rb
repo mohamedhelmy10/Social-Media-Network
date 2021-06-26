@@ -40,8 +40,8 @@ class InvitationsController < ApplicationController
         begin
             # when the current user accept the friend request sent to him
             @friend_request = Invitation.pending_invitation(params[:user_id].to_i, params[:id].to_i)
-            if params[:user_id].to_i != @friend_request.receiver_id
-                render json: {error: "You does not have access to update this post"}
+            if @friend_request.empty?
+                render json: {error: "You does not have access to accept this request"}
             elsif @friend_request.update(status: "accepted")
                 render json: @friend_request
             else
@@ -67,17 +67,19 @@ class InvitationsController < ApplicationController
 
     def destroy
         begin
-            @friend_request = Invitation.find(params[:id])
-            # ceck if the current user is the post owner
-            if params[:user_id].to_i != @friend_request.receiver_id
-                render json: {error: "You does not have access to delete this post"}
+            @friend_request = Invitation.pending_invitation(params[:user_id].to_i, params[:id].to_i)
+            if @friend_request.empty?
+                @friend_request = Invitation.accepted_invitation(params[:user_id].to_i, params[:id].to_i)
+            end
+            if @friend_request.empty?
+                render json: {error: "You does not have access to decline this friend"}
             elsif @friend_request.update(status: "declined")
                 render json: @friend_request
             else
                 render json: @friend_request.errors, status: :unprocessable_entity
-            end  
-        rescue ActiveRecord::RecordNotFound  
-            render json: {error: "This friend request does not exist"} 
+            end
+        rescue ActiveRecord::RecordNotFound
+            render json: {error: "This friend request does not exist to accept"} 
             return
         end
     end

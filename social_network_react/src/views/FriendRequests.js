@@ -15,8 +15,7 @@ class FriendRequests extends Component{
         getRequests.call(this);
     }
 
-    renderRequest() {
-        console.log(this.state.requests);   
+    renderRequest() {  
         return this.state.requests.map((request, index) => (
             <div>
                 <FriendRequest key={index} friend={request}/>

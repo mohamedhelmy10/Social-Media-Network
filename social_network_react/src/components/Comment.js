@@ -17,7 +17,6 @@ class Comment extends Component{
 
     handleDeleteClick= (e)=> {
         e.preventDefault();
-        console.log(this.props.comment.post_id);
         deleteComment.call(this, this.props.comment.post_id, this.props.comment.id);
     }
     handleEditClick= (e)=> {
@@ -28,7 +27,6 @@ class Comment extends Component{
 
     render(){
         if (this.state.redirect) {
-            console.log(this.state.redirect);
             return(
                 <div>
                     <Redirect to={this.state.redirect} />

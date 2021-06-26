@@ -8,7 +8,6 @@ class ReactionsController < ApplicationController
             # the post must be public or the owner of the post is my friend
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @reactions = @post.reactions
-                puts "here"
                 @reactions.each do |reaction|
                     @reactions_users.push({reaction: reaction, user: reaction.user})
                 end

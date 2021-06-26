@@ -12,7 +12,7 @@ class Friend extends Component{
 
     handleRemoveClick= (e)=> {
         e.preventDefault();
-        removeRequestOrFriend.call(this,this.props.invitation.id)
+        removeRequestOrFriend.call(this,this.props.friend.id)
     }
 
     render(){

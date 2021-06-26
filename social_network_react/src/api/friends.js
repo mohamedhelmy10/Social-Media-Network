@@ -26,9 +26,9 @@ export function getRequests() {
     .catch(error => console.log(error));
 
 }
-export function removeRequestOrFriend(invitationId) {
+export function removeRequestOrFriend(friendId) {
   const currUserId = localStorage.getItem('currUserId');
-  axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+invitationId)
+  axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+friendId)
   .then((response) => {
     if (response.data.error)
         alert(response.data.error);
@@ -44,9 +44,9 @@ export function removeRequestOrFriend(invitationId) {
 });
 }
 
-export function acceptFriendRequest(invitationId) {
+export function acceptFriendRequest(friendId) {
   const currUserId = localStorage.getItem('currUserId');
-  axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+invitationId)
+  axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId)
   .then((response) => {
     if (response.data.error)
         alert(response.data.error);

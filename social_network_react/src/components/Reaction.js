@@ -24,7 +24,6 @@ class Reaction extends Component{
     }
     handleEditClick= (e)=> {
         e.preventDefault();
-        console.log(this.state.reaction.id)
         updateReaction.call(this, this.state.reaction);
     }
     

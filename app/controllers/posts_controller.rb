@@ -50,8 +50,6 @@ class PostsController < ApplicationController
         begin
             @post = Post.find(params[:id])
             # check if the current user and post owner are friends or the post is public
-            puts "*"*100
-            puts 
             if User.are_friends?  params[:user_id].to_i, @post.user_id or @post.is_public
                 render json: @post
             else

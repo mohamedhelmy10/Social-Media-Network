@@ -15,7 +15,7 @@ class EditCommentForm extends Component{
     handleChange = (event) => {
 
         this.setState(prevState => {
-            let comment = Object.assign({}, prevState.post);
+            let comment = Object.assign({}, prevState.comment);
             comment[event.target.name] = event.target.value; 
             return { comment };                                
         })
@@ -28,7 +28,6 @@ class EditCommentForm extends Component{
         const postId = this.props.match.params.postId;
         const commentId = this.props.match.params.commentId;
         getComment.call(this, postId, commentId);
-        console.log(this.state.comment);
     }
     
     render(){
