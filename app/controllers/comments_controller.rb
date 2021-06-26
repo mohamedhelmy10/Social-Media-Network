@@ -86,7 +86,6 @@ class CommentsController < ApplicationController
                 render json: {error: "This comment does not belong to this post"}
             elsif params[:user_id].to_i == @comment.post.user_id or params[:user_id].to_i == @comment.user_id  # post owner or comment owner only can delete
                 @comment.destroy
-                redirect_to user_post_comments_path(user_id: params[:user_id], post_id: params[:post_id])
             else
                 render json: {error: "You does not have access to delete this comment"}
             end

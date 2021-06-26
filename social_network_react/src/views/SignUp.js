@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Form } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import Bar from './Bar.js'; 
 import { createUser } from '../api/users.js'; 

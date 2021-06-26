@@ -1,14 +1,20 @@
 import React, { Component } from 'react'
 import { Nav, Button, Row, Col} from "react-bootstrap";
-import {removeRequestOrFriend} from "../api/friends.js"
+import {removeRequestOrFriend} from "../api/friends.js";
+import {acceptFriendRequest} from "../api/friends.js";
 
 
-class Friend extends Component{
+class FriendRequest extends Component{
     constructor(props) {
         super(props)
+        this.handleAcceptClick = this.handleAcceptClick.bind(this);
         this.handleRemoveClick = this.handleRemoveClick.bind(this); 
     }
 
+    handleAcceptClick= (e)=> {
+        e.preventDefault();
+        acceptFriendRequest.call(this,this.props.friend.id);
+    }
 
     handleRemoveClick= (e)=> {
         e.preventDefault();
@@ -34,6 +40,9 @@ class Friend extends Component{
                     </Col>
                     <Col>
                         <div className="buttonsList">
+                            <Button  variant="outline-light" size="sm" onClick = {this.handleAcceptClick}>
+                                Accept
+                            </Button>;
                             <Button  variant="outline-light" size="sm" onClick = {this.handleRemoveClick}>
                                 Remove
                             </Button>
@@ -46,4 +55,4 @@ class Friend extends Component{
     }
 }
 
-export default Friend;  
+export default FriendRequest;  
