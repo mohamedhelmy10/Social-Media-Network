@@ -15,7 +15,13 @@ class MyProfile extends Component{
 
     componentDidMount() {
         const userId = localStorage.getItem('currUserId');
-        getProfilePosts.call(this, userId);
+        let data = getProfilePosts(userId);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({postsAndUser: result}); 
+        });
     }
 
     renderPosts() {
@@ -37,7 +43,11 @@ class MyProfile extends Component{
     }
     handleSubmit= (e)=> {
         e.preventDefault()
-        createPost.call(this)
+        let data = createPost(this.state.post);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
     }
 
 

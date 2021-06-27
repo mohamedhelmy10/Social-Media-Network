@@ -12,7 +12,11 @@ class Friend extends Component{
 
     handleRemoveClick= (e)=> {
         e.preventDefault();
-        removeRequestOrFriend.call(this,this.props.friend.id)
+        let data = removeRequestOrFriend(this.props.friend.id);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error);
+        });
     }
 
     render(){

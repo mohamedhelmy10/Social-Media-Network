@@ -22,11 +22,24 @@ class EditPostForm extends Component{
     }
     handleSubmit= (e)=> {
         e.preventDefault()
-        updatePost.call(this, this.state.post);
+        let data = updatePost(this.state.post);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error);
+            else
+                this.setState({redirect:"/home"});
+        });
     }
+
     componentDidMount(){
         const postId = this.props.match.params.postId;
-        getPost.call(this, postId);
+        let data = getPost(postId);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({post:result});
+        });
     }
     
     render(){

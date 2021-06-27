@@ -10,13 +10,18 @@ class Home extends Component{
         super(props)
         this.state = {
             postsAndUsers: [],
-            post: {},
-            redirect: ''
+            post: {}
         }
     }
     
     componentDidMount() {
-        getPosts.call(this);
+        let data = getPosts();
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({postsAndUsers: result}); 
+        });
     }
 
     renderPosts() {
@@ -36,7 +41,11 @@ class Home extends Component{
     }
     handleSubmit= (e)=> {
         e.preventDefault()
-        createPost.call(this)
+        let data = createPost(this.state.post);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
     }
 
 

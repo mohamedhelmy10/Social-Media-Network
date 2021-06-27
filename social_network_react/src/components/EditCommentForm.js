@@ -22,12 +22,26 @@ class EditCommentForm extends Component{
     }
     handleSubmit= (e)=> {
         e.preventDefault();
-        updateComment.call(this, this.state.comment);
+        let data = updateComment(this.state.comment);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else{
+                const path = "/posts/"+this.state.comment.post_id+"/comments";
+                this.setState({ redirect: path });  
+            }    
+        });
     }
     componentDidMount(){
         const postId = this.props.match.params.postId;
         const commentId = this.props.match.params.commentId;
-        getComment.call(this, postId, commentId);
+        let data = getComment(postId, commentId);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({comment: result});  
+        });
     }
     
     render(){

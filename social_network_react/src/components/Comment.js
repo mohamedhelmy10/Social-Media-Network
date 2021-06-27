@@ -17,7 +17,11 @@ class Comment extends Component{
 
     handleDeleteClick= (e)=> {
         e.preventDefault();
-        deleteComment.call(this, this.props.comment.post_id, this.props.comment.id);
+        let data = deleteComment(this.props.comment.post_id, this.props.comment.id);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
     }
     handleEditClick= (e)=> {
         e.preventDefault();

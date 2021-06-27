@@ -21,7 +21,7 @@ class SignUp extends Component{
               marital_status: false,
               about_me: ''
           },
-          redirect: null
+          redirect: ''
 
         }
       }
@@ -36,8 +36,14 @@ class SignUp extends Component{
       }
 
       handleSubmit= (e)=> {
-        e.preventDefault()
-        createUser.call(this)
+        e.preventDefault();
+        let data = createUser(this.state.user);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error);
+            else
+                this.setState({redirect: '/log-in'});
+        });
 
       }
     render(){

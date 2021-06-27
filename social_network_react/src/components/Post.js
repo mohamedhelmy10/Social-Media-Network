@@ -17,7 +17,11 @@ class Post extends Component{
       }
     handleDeleteClick= (e)=> {
         e.preventDefault();
-        deletePost.call(this, this.props.post.id);
+        let data = deletePost(this.props.post.id);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
     }
     handleEditClick= (e)=> {
         e.preventDefault();
@@ -34,7 +38,11 @@ class Post extends Component{
     handleSubmit= (e)=> {
         e.preventDefault();
         const postId = this.props.post.id;
-        createReaction.call(this, postId);
+        let data = createReaction(postId, this.state.reaction);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);    
+        });
     }
     
     render(){

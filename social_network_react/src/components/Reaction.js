@@ -20,11 +20,15 @@ class Reaction extends Component{
     }
     handleDeleteClick= (e)=> {
         e.preventDefault();
-        deleteReaction.call(this, this.state.reaction.post_id, this.state.reaction.id);
+        deleteReaction(this.state.reaction.post_id, this.state.reaction.id);
     }
     handleEditClick= (e)=> {
         e.preventDefault();
-        updateReaction.call(this, this.state.reaction);
+        let data = updateReaction(this.state.reaction);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);    
+        });
     }
     
     render(){   

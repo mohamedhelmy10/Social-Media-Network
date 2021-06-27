@@ -15,7 +15,13 @@ class Profile extends Component{
 
     componentDidMount() {
         const userId = this.props.match.params.profileId;
-        getProfilePosts.call(this, userId);
+        let data = getProfilePosts(userId);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({postsAndUser: result}); 
+        });
     }
 
     renderPosts() {
@@ -30,7 +36,11 @@ class Profile extends Component{
     handleSendClick= (e)=> {
         const user = this.state.postsAndUser[0];
         e.preventDefault();
-        sendFriendRequest.call(this, user.id)
+        let data = sendFriendRequest(user.id);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
     }
     render(){
         return (

@@ -13,12 +13,20 @@ class FriendRequest extends Component{
 
     handleAcceptClick= (e)=> {
         e.preventDefault();
-        acceptFriendRequest.call(this,this.props.friend.id);
+        let data = acceptFriendRequest(this.props.friend.id);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error)    
+        });
     }
 
     handleRemoveClick= (e)=> {
         e.preventDefault();
-        removeRequestOrFriend.call(this,this.props.friend.id)
+        let data = removeRequestOrFriend(this.props.friend.id);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error);
+        });
     }
 
     render(){

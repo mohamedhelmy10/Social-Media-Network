@@ -17,7 +17,13 @@ class Comments extends Component{
     
     componentDidMount() {
         const postId = this.props.match.params.postId;
-        getComments.call(this,postId );
+        let data = getComments(postId);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({commentsAndUsers: result})    
+        });
     }
 
     handleChange = (event) => {
@@ -31,7 +37,11 @@ class Comments extends Component{
     handleSubmit= (e)=> {
         e.preventDefault();
         const postId = this.props.match.params.postId;
-        createComment.call(this, postId);
+        let data = createComment(postId, this.state.comment);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
     }
 
     renderComments() {
