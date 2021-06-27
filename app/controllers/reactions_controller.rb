@@ -8,7 +8,6 @@ class ReactionsController < ApplicationController
             # the post must be public or the owner of the post is my friend
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @reactions = @post.reactions
-                puts "here"
                 @reactions.each do |reaction|
                     @reactions_users.push({reaction: reaction, user: reaction.user})
                 end
@@ -42,6 +41,7 @@ class ReactionsController < ApplicationController
     def create
         # check if the post is public or the post owner and the current user are friends
         begin
+            
             @post = Post.find(params[:post_id])
             @post.reactions.each do |reaction|
                 # the current user already reacted to this post
@@ -96,7 +96,6 @@ class ReactionsController < ApplicationController
              # reaction owner only can remove it
             elsif params[:user_id].to_i == @reaction.user_id 
                 @reaction.destroy
-                redirect_to user_post_reactions_path(user_id: params[:user_id], post_id: params[:post_id])
             else
                 render json: {error: "You does not have access to remove this reaction"}
             end

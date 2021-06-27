@@ -14,7 +14,6 @@ class Feed extends Component{
         axios.get('http://localhost:3000/api/v1/users/'+this.props.userId+'/posts')
         .then(response => {
           this.setState({posts: response.data});
-          console.log(this.state.posts);
         })
         .catch(error => console.log(error))
       }

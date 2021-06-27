@@ -37,7 +37,7 @@ class PostsController < ApplicationController
 
     def create
         begin
-            @user = User.find(params[:id])
+            @user = User.find(params[:user_id])
             @post = @user.posts.create(post_params)
             render json: @post
         rescue ActiveRecord::RecordNotFound  
@@ -50,7 +50,7 @@ class PostsController < ApplicationController
         begin
             @post = Post.find(params[:id])
             # check if the current user and post owner are friends or the post is public
-            if User.are_friends?  params[:user_id], @post.user_id or @post.is_public
+            if User.are_friends?  params[:user_id].to_i, @post.user_id or @post.is_public
                 render json: @post
             else
                 render json: {error: "You does not have access to see this post"} 
@@ -59,6 +59,21 @@ class PostsController < ApplicationController
             render json: {error: "This post does not exist"} 
             return
         end 
+    end
+
+    def new
+        begin
+            @post = Post.find(params[:id])
+            # ceck if the current user is the post owner
+            if @post.user_id.to_s == params[:user_id]
+                render json: @post
+            else
+                render json: {error: "You does not have access to edit this post"}
+            end
+        rescue ActiveRecord::RecordNotFound  
+            render json: {error: "This post does not exist"} 
+            return
+        end
     end
 
     def update
@@ -86,7 +101,6 @@ class PostsController < ApplicationController
             # ceck if the current user is the post owner
             if @post.user_id.to_s == params[:user_id]
                 @post.destroy
-                redirect_to user_posts_path(params[:user_id])
             else
                 render json: {error: "You does not have access to delete this post"}
             end   

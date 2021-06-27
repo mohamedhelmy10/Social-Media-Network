@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import Post from '../components/Post.js';
+import { Form, Button } from "react-bootstrap";
 import  HomeBar from './homeBar.js';
 import {getProfilePosts} from '../api/posts.js';
+import {createPost} from '../api/posts.js';
+
 class MyProfile extends Component{
     constructor(props) {
         super(props)
@@ -12,10 +15,16 @@ class MyProfile extends Component{
 
     componentDidMount() {
         const userId = localStorage.getItem('currUserId');
-        getProfilePosts.call(this, userId);
+        let data = getProfilePosts(userId);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({postsAndUser: result}); 
+        });
     }
 
-    renderPost() {
+    renderPosts() {
         const user = this.state.postsAndUser[0];
         return this.state.postsAndUser.map((post, index) => (
                 (index !=0)&&
@@ -24,24 +33,49 @@ class MyProfile extends Component{
                 </div>
         ));
     }
+    handleChange = (event) => {
+
+        this.setState(prevState => {
+            let post = Object.assign({}, prevState.post);
+            post[event.target.name] = event.target.value; 
+            return { post };                                
+        })
+    }
+    handleSubmit= (e)=> {
+        e.preventDefault()
+        let data = createPost(this.state.post);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+        });
+    }
+
+
     render(){
         return (
             <div>
                 <HomeBar/>
-            <div className="col-md-4">
-                <div className="col-md-5">
-                    <div className="form-area">  
-                        <form role="form">
-                            <br styles="clear:both" />             
-                            <div className="form-group">
-                                <textarea className="form-control" type="textarea" id="caption" placeholder="Start a post" cols="50" rows="10" ></textarea>
-                            </div>                   
-                            <button type="button" id="submit" name="submit" className="btn btn-primary pull-right">Add Post</button>
-                        </form>
-                    </div>
-                </div>
-                {this.renderPost()}
+            <div className="col-md-4" className="posts">
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Group controlId="formBasicFirstName">
+                    <Form.Control type="textarea" placeholder="Write what you think"  style={{ height: 200 , textAlign: 'center'}}  name = "caption" onChange={this.handleChange} />
+                </Form.Group> 
+
+                <Form.Group controlId="formBasicGender">
+                    <Form.Label>Public</Form.Label>
+                    <Form.Control as="select" name = "is_public" onChange={this.handleChange} style={{ width: 60 }}>
+                        <option>True</option>
+                        <option>False</option>
+                    </Form.Control>
+                </Form.Group>
+                
+                <Button variant="primary" type="submit">
+                    Add Post
+                </Button> 
+            </Form>
             </div>
+                {this.renderPosts()}
+            
             </div>
         );
     }
