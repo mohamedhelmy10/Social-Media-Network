@@ -5,11 +5,10 @@ class ReactionsController < ApplicationController
         begin
             @reactions_users = []
             @post = Post.find(params[:post_id])
-            # the post must be public or the owner of the post is my friend
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @reactions = @post.reactions
                 @reactions.each do |reaction|
-                    @reactions_users.push({reaction: reaction, user: reaction.user})
+                    @reactions_users.push({reaction: ReactionSerializer.new(reaction), user: UserSerializer.new(reaction.user)})
                 end
                 render json: @reactions_users
             else
@@ -26,7 +25,6 @@ class ReactionsController < ApplicationController
             @reaction = Reaction.find(params[:id])
             if @reaction.post_id != params[:post_id].to_i
                 render json: {error: "This reaction does not belong to this post"}
-            # the post must be public or the owner of the post is my friend
             elsif User.are_friends? params[:user_id].to_i, @reaction.post.user_id or @reaction.post.is_public
                 render json: @reaction
             else
@@ -39,12 +37,9 @@ class ReactionsController < ApplicationController
     end
 
     def create
-        # check if the post is public or the post owner and the current user are friends
-        begin
-            
+        begin       
             @post = Post.find(params[:post_id])
             @post.reactions.each do |reaction|
-                # the current user already reacted to this post
                 if reaction.user_id == params[:user_id].to_i
                     render json: {error: "You already reacted to this post"}
                     return
@@ -52,7 +47,6 @@ class ReactionsController < ApplicationController
             end
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @reaction = @post.reactions.create(reaction_params) 
-                # put the reaction owner to be the current user
                 if @reaction.update(user_id: params[:user_id].to_i)  
                     render json: @reaction
                 else
@@ -72,7 +66,6 @@ class ReactionsController < ApplicationController
             @reaction = Reaction.find(params[:id])
             if @reaction.post_id != params[:post_id].to_i
                 render json: {error: "This reaction does not belong to this post"}
-            # reaction owner only can edit
             elsif params[:user_id].to_i == @reaction.user_id 
                 if @reaction.update(reaction_params)  
                     render json: @reaction
@@ -93,7 +86,6 @@ class ReactionsController < ApplicationController
             @reaction = Reaction.find(params[:id])
             if @reaction.post_id != params[:post_id].to_i
                 render json: {error: "This reaction does not belong to this post"}
-             # reaction owner only can remove it
             elsif params[:user_id].to_i == @reaction.user_id 
                 @reaction.destroy
             else

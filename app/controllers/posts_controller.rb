@@ -1,23 +1,19 @@
 class PostsController < ApplicationController
     protect_from_forgery prepend: true
     #before_action :authorized
-    
-      #User home page
     def index
         @posts = Post.all
         @allowed_posts = []
 
         @posts.each do |post|
-            # check if the current user and post owner are friends or the post is public
             if User.are_friends? params[:user_id].to_i, post.user_id or post.is_public 
-                @allowed_posts.push ({post: post, user: post.user})
+                @allowed_posts.push ({post: PostSerializer.new(post), user: UserSerializer.new(post.user)})
             end
         end 
         render json: @allowed_posts.reverse
     end
 
     def profile
-        # user profile
         begin
             @user = User.find(params[:id])
             @posts = []
@@ -49,7 +45,6 @@ class PostsController < ApplicationController
     def show
         begin
             @post = Post.find(params[:id])
-            # check if the current user and post owner are friends or the post is public
             if User.are_friends?  params[:user_id].to_i, @post.user_id or @post.is_public
                 render json: @post
             else
@@ -64,7 +59,6 @@ class PostsController < ApplicationController
     def new
         begin
             @post = Post.find(params[:id])
-            # ceck if the current user is the post owner
             if @post.user_id.to_s == params[:user_id]
                 render json: @post
             else
@@ -79,7 +73,6 @@ class PostsController < ApplicationController
     def update
         begin
             @post = Post.find(params[:id])
-            # ceck if the current user is the post owner
             if @post.user_id.to_s == params[:user_id]
                 if @post.update(post_params)
                     render json: @post
@@ -98,7 +91,6 @@ class PostsController < ApplicationController
     def destroy
         begin
             @post = Post.find(params[:id])
-            # ceck if the current user is the post owner
             if @post.user_id.to_s == params[:user_id]
                 @post.destroy
             else

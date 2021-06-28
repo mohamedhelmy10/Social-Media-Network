@@ -1,13 +1,10 @@
 class InvitationsController < ApplicationController
     protect_from_forgery prepend: true
     #before_action :authorized
-
-    #this action return all the friend request sent to the current user
     def index
         begin
             #current_user
             @user = User.find(params[:user_id])
-            # return all the friend requests sent to me
             @friend_requests = @user.received_friend_requests
             render json: @friend_requests
         rescue ActiveRecord::RecordNotFound  
@@ -26,7 +23,6 @@ class InvitationsController < ApplicationController
             elsif @user.pending_request?(params[:friend_id].to_i)
                     render json: {error: "Already Sent"}
             else
-                # the current user sent friend request to another user
                 @sent_request = @user.create_friend_request(params[:friend_id].to_i)
                 render json: @sent_request
             end
@@ -38,7 +34,6 @@ class InvitationsController < ApplicationController
 
     def update
         begin
-            # when the current user accept the friend request sent to him
             @friend_request = Invitation.pending_invitation(params[:user_id].to_i, params[:id].to_i)
             if @friend_request.empty?
                 render json: {error: "You does not have access to accept this request"}
@@ -55,8 +50,7 @@ class InvitationsController < ApplicationController
 
     def friends
         begin
-            #Current user
-            @user = User.find(params[:user_id]) # Current user
+            @user = User.find(params[:user_id])
             @my_friends = @user.my_friends
             render json: @my_friends
         rescue  ActiveRecord::RecordNotFound

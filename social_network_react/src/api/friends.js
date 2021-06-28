@@ -23,7 +23,6 @@ export async function getRequests() {
 }
 export async function removeRequestOrFriend(friendId) {
   try {
-      console.log(friendId);
       const currUserId = localStorage.getItem('currUserId');
       let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+friendId);
       let data = await response.data;

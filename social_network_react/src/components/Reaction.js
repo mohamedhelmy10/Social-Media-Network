@@ -50,7 +50,7 @@ class Reaction extends Component{
                     </Col>
                     <Col>
                     <Form.Group controlId="formBasicGender">
-                        <Form.Control as="select" name = "reaction_type" value= {this.props.reaction.reaction_type} onChange={this.handleChange} style={{ width: 60 }} onClick={this.handleEditClick} >
+                        <Form.Control as="select" name = "reaction_type" value= {this.state.reaction.reaction_type} onChange={this.handleChange} style={{ width: 60 }} onClick={this.handleEditClick} >
                             <option>Like</option>
                             <option>Love</option>
                             <option>Haha</option>
