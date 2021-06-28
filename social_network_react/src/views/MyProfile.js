@@ -29,7 +29,7 @@ class MyProfile extends Component{
         return this.state.postsAndUser.map((post, index) => (
                 (index !=0)&&
                 <div>
-                    <Post key={index} post={post} user = {user}/>
+                    <Post key={index} post={post.data} user = {user.data}/>
                 </div>
         ));
     }

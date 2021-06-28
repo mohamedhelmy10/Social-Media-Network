@@ -17,7 +17,7 @@ class Comment extends Component{
 
     handleDeleteClick= (e)=> {
         e.preventDefault();
-        let data = deleteComment(this.props.comment.post_id, this.props.comment.id);
+        let data = deleteComment(this.props.comment.attributes.post_id, this.props.comment.id);
         data.then(result=>{
             if(result.error)
                 alert(result.error);
@@ -25,7 +25,7 @@ class Comment extends Component{
     }
     handleEditClick= (e)=> {
         e.preventDefault();
-        const path = "/posts/"+ this.props.comment.post_id + "/comments/"+this.props.comment.id;
+        const path = "/posts/"+ this.props.comment.attributes.post_id + "/comments/"+this.props.comment.id;
         this.setState({redirect: path});    
     }
 
@@ -44,7 +44,7 @@ class Comment extends Component{
         else
              profilePath = "/profile/"+this.props.user.id;
              
-        const userName = this.props.user.first_name+" "+this.props.user.last_name;
+        const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
 
         return (   
             <div className="comment">  
@@ -52,7 +52,7 @@ class Comment extends Component{
                     <Nav.Link href={profilePath}>{userName}</Nav.Link>
                 </Nav>
                 <div className="content">
-                    <h2 className ="data">{this.props.comment.body}</h2>
+                    <h2 className ="data">{this.props.comment.attributes.body}</h2>
                 </div>
                 <div className="buttonsList">
                     <Button  variant="outline-light" size="sm" onClick = {this.handleEditClick}>

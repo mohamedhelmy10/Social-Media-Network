@@ -37,7 +37,7 @@ class FriendRequest extends Component{
         else
              profilePath = "/profile/"+this.props.friend.id;
 
-        const userName = this.props.friend.first_name+" "+this.props.friend.last_name;
+        const userName = this.props.friend.attributes.first_name+" "+this.props.friend.attributes.last_name;
         return (   
             <div>
                 <Row>

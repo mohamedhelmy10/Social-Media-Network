@@ -47,7 +47,7 @@ class Comments extends Component{
     renderComments() {
         return (this.state.commentsAndUsers.map((commentAndUser, index) => (
             <div>
-                <Comment key={index} comment={commentAndUser.comment} user= {commentAndUser.user}/>
+                <Comment key={index} comment={commentAndUser.comment.data} user= {commentAndUser.user.data}/>
             </div>
         ))
             

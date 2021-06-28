@@ -1,3 +1,4 @@
-class PostSerializer < ActiveModel::Serializer
-  attributes :id, :caption, :image, :is_public
+class PostSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :caption, :image, :is_public
 end

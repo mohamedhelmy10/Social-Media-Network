@@ -6,7 +6,7 @@ class InvitationsController < ApplicationController
             #current_user
             @user = User.find(params[:user_id])
             @friend_requests = @user.received_friend_requests
-            render json: @friend_requests
+            render json: UserSerializer.new(@friend_requests)
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist"} 
             return
@@ -24,7 +24,7 @@ class InvitationsController < ApplicationController
                     render json: {error: "Already Sent"}
             else
                 @sent_request = @user.create_friend_request(params[:friend_id].to_i)
-                render json: @sent_request
+                render json: InvitationSerializer.new(@sent_request)
             end
         rescue ActiveRecord::RecordNotFound
             render json: {error: "This user does not exist"} 
@@ -38,7 +38,7 @@ class InvitationsController < ApplicationController
             if @friend_request.empty?
                 render json: {error: "You does not have access to accept this request"}
             elsif @friend_request.update(status: "accepted")
-                render json: @friend_request
+                render json: InvitationSerializer.new(@friend_request)
             else
                 render json: @friend_request.errors, status: :unprocessable_entity
             end
@@ -52,7 +52,7 @@ class InvitationsController < ApplicationController
         begin
             @user = User.find(params[:user_id])
             @my_friends = @user.my_friends
-            render json: @my_friends
+            render json: UserSerializer.new(@my_friends)
         rescue  ActiveRecord::RecordNotFound
             render json: {error: "This user does not exist"} 
             return
@@ -65,10 +65,11 @@ class InvitationsController < ApplicationController
             if @friend_request.empty?
                 @friend_request = Invitation.accepted_invitation(params[:user_id].to_i, params[:id].to_i)
             end
+            puts @friend_request    
             if @friend_request.empty?
                 render json: {error: "You does not have access to decline this friend"}
             elsif @friend_request.update(status: "declined")
-                render json: @friend_request
+                render json: InvitationSerializer.new(@friend_request)
             else
                 render json: @friend_request.errors, status: :unprocessable_entity
             end

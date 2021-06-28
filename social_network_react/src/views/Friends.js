@@ -17,7 +17,7 @@ class Friends extends Component{
             if (result.error)
                 alert(result.error);
             else
-                this.setState({friends: result});
+                this.setState({friends: result.data});
         });
     }
 

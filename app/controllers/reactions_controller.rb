@@ -26,7 +26,7 @@ class ReactionsController < ApplicationController
             if @reaction.post_id != params[:post_id].to_i
                 render json: {error: "This reaction does not belong to this post"}
             elsif User.are_friends? params[:user_id].to_i, @reaction.post.user_id or @reaction.post.is_public
-                render json: @reaction
+                render json: ReactionSerializer.new(@reaction)
             else
                 render json: {error: "You can not see this reaction, it is a private post"}
             end
@@ -48,7 +48,7 @@ class ReactionsController < ApplicationController
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @reaction = @post.reactions.create(reaction_params) 
                 if @reaction.update(user_id: params[:user_id].to_i)  
-                    render json: @reaction
+                    render json: ReactionSerializer.new(@reaction)
                 else
                     render json: @reaction.errors, status: :unprocessable_entity
                 end
@@ -68,7 +68,7 @@ class ReactionsController < ApplicationController
                 render json: {error: "This reaction does not belong to this post"}
             elsif params[:user_id].to_i == @reaction.user_id 
                 if @reaction.update(reaction_params)  
-                    render json: @reaction
+                    render json: ReactionSerializer.new(@reaction)
                 else
                     render json: @reaction.errors, status: :unprocessable_entity
                 end

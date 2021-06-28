@@ -17,7 +17,7 @@ class FriendRequests extends Component{
             if (result.error)
                 alert (result.error)
             else
-                this.setState({requests : result});
+                this.setState({requests : result.data});
         });
     }
 

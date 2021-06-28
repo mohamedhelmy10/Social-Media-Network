@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Friend from '../components/Friend';
+import { currUser } from './users';
 
 export async function getFriends() {
   try {

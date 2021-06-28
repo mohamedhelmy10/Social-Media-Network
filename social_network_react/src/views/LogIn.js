@@ -34,7 +34,7 @@ class LogIn extends Component{
             if (result.error)
                 alert(result.error);
             else{
-                localStorage.setItem('currUserId', result.user.id);
+                localStorage.setItem('currUserId', result.user.data.id);
                 this.setState({ redirect: "/home" });
             }    
         });

@@ -26,7 +26,7 @@ class CommentsController < ApplicationController
             if @comment.post_id != params[:post_id].to_i
                 render json: {error: "This comment does not belong to this post"}
             elsif User.are_friends? params[:user_id].to_i, @comment.post.user_id or @comment.post.is_public
-                render json: @comment
+                render json: CommentSerializer.new(@comment)
             else
                 render json: {error: "You can not see this comment, it is a private post"}
             end
@@ -42,7 +42,7 @@ class CommentsController < ApplicationController
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @comment = @post.comments.create(comment_params) 
                 if @comment.update(user_id: params[:user_id].to_i)  
-                    render json: @comment
+                    render json: CommentSerializer.new(@comment)
                 else
                     render json: @comment.errors, status: :unprocessable_entity
                 end
@@ -62,7 +62,7 @@ class CommentsController < ApplicationController
                 render json: {error: "This comment does not belong to this post"}
             elsif params[:user_id].to_i == @comment.post.user_id or params[:user_id].to_i == @comment.user_id
                 if @comment.update(comment_params)  
-                    render json: @comment
+                    render json: CommentSerializer.new(@comment)
                 else
                     render json: @comment.errors, status: :unprocessable_entity
                 end

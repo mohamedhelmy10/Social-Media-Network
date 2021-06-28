@@ -60,7 +60,7 @@ class Post extends Component{
         else
             profilePath = "/profile/"+this.props.user.id;
 
-        const userName = this.props.user.first_name+" "+this.props.user.last_name;
+        const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
         const commentsPath = "/posts/"+this.props.post.id+"/comments";
         const reactionsPath = "/posts/"+this.props.post.id+"/reactions";
         if (profilePath=="/profile"){
@@ -69,7 +69,7 @@ class Post extends Component{
                     <Nav className="flex-column">
                         <Nav.Link href={profilePath} className="userName">{userName}</Nav.Link>
                         <div className ="content">
-                            <h1 className ="data">{this.props.post.caption}</h1>
+                            <h1 className ="data">{this.props.post.attributes.caption}</h1>
                         </div>
                     </Nav>
                     <div className="buttonsList">
@@ -106,7 +106,7 @@ class Post extends Component{
                     <Nav className="flex-column">
                         <Nav.Link href={profilePath} className="userName">{userName}</Nav.Link>
                         <div className ="content">
-                            <h1 className ="data">{this.props.post.caption}</h1>
+                            <h1 className ="data">{this.props.post.attributes.caption}</h1>
                         </div>
                     </Nav>
                     <div className="buttonsList">

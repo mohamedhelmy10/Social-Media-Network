@@ -19,10 +19,10 @@ class PostsController < ApplicationController
             @posts = []
             @user.posts.each do |post|
                 if User.are_friends?  params[:user_id].to_i , @user.id or post.is_public
-                    @posts.push post
+                    @posts.push PostSerializer.new(post)
                 end
             end
-            @posts.push @user
+            @posts.push UserSerializer.new(@user)
             render json: @posts.reverse
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist"} 
@@ -35,7 +35,7 @@ class PostsController < ApplicationController
         begin
             @user = User.find(params[:user_id])
             @post = @user.posts.create(post_params)
-            render json: @post
+            render json: PostSerializer.new(@post)
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist to add a post"} 
             return
@@ -46,7 +46,7 @@ class PostsController < ApplicationController
         begin
             @post = Post.find(params[:id])
             if User.are_friends?  params[:user_id].to_i, @post.user_id or @post.is_public
-                render json: @post
+                render json: PostSerializer.new(@post)
             else
                 render json: {error: "You does not have access to see this post"} 
             end   
@@ -60,7 +60,7 @@ class PostsController < ApplicationController
         begin
             @post = Post.find(params[:id])
             if @post.user_id.to_s == params[:user_id]
-                render json: @post
+                render json: PostSerializer.new(@post)
             else
                 render json: {error: "You does not have access to edit this post"}
             end
@@ -75,7 +75,7 @@ class PostsController < ApplicationController
             @post = Post.find(params[:id])
             if @post.user_id.to_s == params[:user_id]
                 if @post.update(post_params)
-                    render json: @post
+                    render json: PostSerializer.new(@post)
                 else   
                     render json: @post.errors, status: :unprocessable_entity
                 end

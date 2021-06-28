@@ -35,7 +35,7 @@ export async function deleteReaction(postId, reactionId){
   export async function updateReaction(reaction){
     try {
         const currUserId = localStorage.getItem('currUserId');
-        let response = await axios.put("http://localhost:3000/api/v1/users/"+currUserId+"/posts/"+reaction.post_id+"/reactions/"+reaction.id, reaction);
+        let response = await axios.put("http://localhost:3000/api/v1/users/"+currUserId+"/posts/"+reaction.attributes.post_id+"/reactions/"+reaction.id, reaction);
         let data = await response.data;
         return data;
     } catch (error) {

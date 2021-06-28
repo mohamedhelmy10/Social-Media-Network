@@ -38,7 +38,7 @@ class EditPostForm extends Component{
             if(result.error)
                 alert(result.error);
             else
-                this.setState({post:result});
+                this.setState({post:result.data});
         });
     }
     

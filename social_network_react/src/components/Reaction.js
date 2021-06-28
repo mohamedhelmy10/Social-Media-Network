@@ -20,7 +20,7 @@ class Reaction extends Component{
     }
     handleDeleteClick= (e)=> {
         e.preventDefault();
-        deleteReaction(this.state.reaction.post_id, this.state.reaction.id);
+        deleteReaction(this.state.reaction.attributes.post_id, this.state.reaction.id);
     }
     handleEditClick= (e)=> {
         e.preventDefault();
@@ -31,7 +31,7 @@ class Reaction extends Component{
         });
     }
     
-    render(){   
+    render(){ 
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
         if (currUserId == this.props.user.id)
@@ -39,7 +39,7 @@ class Reaction extends Component{
         else
              profilePath = "/profile/"+this.props.user.id;
 
-        const userName = this.props.user.first_name+" "+this.props.user.last_name;
+        const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
         return (   
             <div className="reaction"> 
                 <Row>
@@ -50,7 +50,7 @@ class Reaction extends Component{
                     </Col>
                     <Col>
                     <Form.Group controlId="formBasicGender">
-                        <Form.Control as="select" name = "reaction_type" value= {this.state.reaction.reaction_type} onChange={this.handleChange} style={{ width: 60 }} onClick={this.handleEditClick} >
+                        <Form.Control as="select" name = "reaction_type" value= {this.state.reaction.attributes.reaction_type} onChange={this.handleChange} style={{ width: 60 }} onClick={this.handleEditClick} >
                             <option>Like</option>
                             <option>Love</option>
                             <option>Haha</option>

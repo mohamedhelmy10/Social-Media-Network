@@ -1,3 +1,4 @@
-class ReactionSerializer < ActiveModel::Serializer
-  attributes :id, :reaction_type, :post_id
+class ReactionSerializer 
+  include FastJsonapi::ObjectSerializer
+  attributes :reaction_type, :post_id
 end

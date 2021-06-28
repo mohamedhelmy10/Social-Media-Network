@@ -27,7 +27,7 @@ class Home extends Component{
     renderPosts() {
         return this.state.postsAndUsers.map((postAndUser, index) => (
             <div>
-                <Post key={index} post={postAndUser.post} user={postAndUser.user}/>
+                <Post key={index} post={postAndUser.post.data} user={postAndUser.user.data}/>
             </div>
         ));
     }

@@ -1,10 +1,10 @@
   class UsersController < ApplicationController
     protect_from_forgery prepend: true
-   # before_action :authorized, except: [:create, :login]
+    #before_action :authorized, except: [:create, :login]
 
   def index
     @users = User.all
-    render json: @users
+    render json: UserSerializer.new(@users)
   end
 
   def create
@@ -12,7 +12,7 @@
     if @user.valid?
       if @user.save!
         token = encode_token({user_id: @user.id})
-        render json: {user: UserSerializer.new(@user), token: token}
+        render json: {user: @user, token: token}
       else
         render json: @user.errors, status: :unprocessable_entit
       end
@@ -25,6 +25,7 @@
     begin
       @user = User.find_by(email: params[:email])
       if @user.authenticate(params[:password])
+        
         token = encode_token({user_id: @user.id})
         render json: {user: UserSerializer.new(@user), token: token}
       else
@@ -44,7 +45,7 @@
   def show
     begin
       @user = User.find(params[:id])
-      render json: @user
+      render json: UserSerializer.new(@user)
     rescue ActiveRecord::RecordNotFound
       render json: {error: "This user does not exist"} 
       return
@@ -56,7 +57,7 @@
       @user = User.find(params[:id])
       if 2 == @user.id 
         if @user.update(user_params)
-            render json: @user
+            render json: UserSerializer.new(@user)
         else
           render json: @user.errors, status: :unprocessable_entity
         end

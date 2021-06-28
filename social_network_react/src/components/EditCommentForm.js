@@ -39,9 +39,12 @@ class EditCommentForm extends Component{
         data.then(result=>{
             if(result.error)
                 alert(result.error);
-            else
-                this.setState({comment: result});  
+            else{
+                this.setState({comment: result}); 
+            }
+                 
         });
+        
     }
     
     render(){
