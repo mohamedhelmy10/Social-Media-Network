@@ -1,20 +1,55 @@
 import axios from 'axios';
 
-export function getFriends() {
-    const currUserId = localStorage.getItem('currUserId');
-    axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/friends')
-    .then(response => {
-      this.setState({friends: response.data});
-    })
-    .catch(error => console.log(error));
+export async function getFriends() {
+  try {
+      const currUserId = localStorage.getItem('currUserId');
+      let response = await axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/friends');
+      let data = await response.data;
+      return data;
+  } catch (error) {
+      alert(error);
+  } 
 }
 
-export function getRequests() {
-    const currUserId = localStorage.getItem('currUserId');
-    axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations')
-    .then(response => {
-      this.setState({requests: response.data});
-      console.log(this.state.requests);
-    })
-    .catch(error => console.log(error));
+export async function getRequests() {
+    try {
+        const currUserId = localStorage.getItem('currUserId');
+        let response = await axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations');
+        let data = await response.data;
+        return data;
+    } catch (error) {
+        alert(error);
+    }
+}
+export async function removeRequestOrFriend(friendId) {
+  try {
+      const currUserId = localStorage.getItem('currUserId');
+      let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+friendId);
+      let data = await response.data;
+      return data;  
+  } catch (error) {
+      alert(error);
+  }
+}
+
+export async function acceptFriendRequest(friendId) {
+  try {
+      const currUserId = localStorage.getItem('currUserId');
+      let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId);
+      let data = await response.data;
+      return data;
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export async function sendFriendRequest(friendId) {
+  try {
+      const currUserId = localStorage.getItem('currUserId');
+      let response = await axios.post('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId);
+      let data = await response.data;
+      return data;
+  } catch (error) {
+      alert(error);
+  }
 }

@@ -1,20 +1,18 @@
   class UsersController < ApplicationController
     protect_from_forgery prepend: true
-    #before_action :authorized, except: [:create, :login]
+   # before_action :authorized, except: [:create, :login]
 
   def index
     @users = User.all
     render json: @users
   end
 
-
-  # REGISTER
   def create
     @user = User.new(user_params)
     if @user.valid?
       if @user.save!
         token = encode_token({user_id: @user.id})
-        render json: {user: @user, token: token}
+        render json: {user: UserSerializer.new(@user), token: token}
       else
         render json: @user.errors, status: :unprocessable_entit
       end
@@ -23,13 +21,12 @@
     end
   end
 
-  # LOGGING IN
   def login
     begin
       @user = User.find_by(email: params[:email])
       if @user.authenticate(params[:password])
         token = encode_token({user_id: @user.id})
-        render json: {user: @user, token: token}
+        render json: {user: UserSerializer.new(@user), token: token}
       else
         render json: {error: "Invalid password"}
       end
@@ -39,9 +36,8 @@
     end
   end
 
-  #Auto Login
   def auto_login
-    render json: @user
+    render json: UserSerializer.new(@user)
   end
   
 

@@ -1,23 +1,19 @@
 class PostsController < ApplicationController
     protect_from_forgery prepend: true
     #before_action :authorized
-    
-      #User home page
     def index
         @posts = Post.all
         @allowed_posts = []
 
         @posts.each do |post|
-            # check if the current user and post owner are friends or the post is public
             if User.are_friends? params[:user_id].to_i, post.user_id or post.is_public 
-                @allowed_posts.push ({post: post, user: post.user})
+                @allowed_posts.push ({post: PostSerializer.new(post), user: UserSerializer.new(post.user)})
             end
         end 
         render json: @allowed_posts.reverse
     end
 
     def profile
-        # user profile
         begin
             @user = User.find(params[:id])
             @posts = []
@@ -37,7 +33,7 @@ class PostsController < ApplicationController
 
     def create
         begin
-            @user = User.find(params[:id])
+            @user = User.find(params[:user_id])
             @post = @user.posts.create(post_params)
             render json: @post
         rescue ActiveRecord::RecordNotFound  
@@ -49,8 +45,7 @@ class PostsController < ApplicationController
     def show
         begin
             @post = Post.find(params[:id])
-            # check if the current user and post owner are friends or the post is public
-            if User.are_friends?  params[:user_id], @post.user_id or @post.is_public
+            if User.are_friends?  params[:user_id].to_i, @post.user_id or @post.is_public
                 render json: @post
             else
                 render json: {error: "You does not have access to see this post"} 
@@ -61,10 +56,23 @@ class PostsController < ApplicationController
         end 
     end
 
+    def new
+        begin
+            @post = Post.find(params[:id])
+            if @post.user_id.to_s == params[:user_id]
+                render json: @post
+            else
+                render json: {error: "You does not have access to edit this post"}
+            end
+        rescue ActiveRecord::RecordNotFound  
+            render json: {error: "This post does not exist"} 
+            return
+        end
+    end
+
     def update
         begin
             @post = Post.find(params[:id])
-            # ceck if the current user is the post owner
             if @post.user_id.to_s == params[:user_id]
                 if @post.update(post_params)
                     render json: @post
@@ -83,10 +91,8 @@ class PostsController < ApplicationController
     def destroy
         begin
             @post = Post.find(params[:id])
-            # ceck if the current user is the post owner
             if @post.user_id.to_s == params[:user_id]
                 @post.destroy
-                redirect_to user_posts_path(params[:user_id])
             else
                 render json: {error: "You does not have access to delete this post"}
             end   

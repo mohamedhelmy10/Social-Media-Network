@@ -5,11 +5,10 @@ class CommentsController < ApplicationController
         begin
             @comments_users = []
             @post = Post.find(params[:post_id])
-            # the post must be public or the owner of the post is my friend
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @comments = @post.comments
                 @comments.each do |comment|
-                    @comments_users.push({comment: comment, user: comment.user})
+                    @comments_users.push({comment: CommentSerializer.new(comment), user: UserSerializer.new(comment.user)})
                 end
                 render json: @comments_users
             else
@@ -26,7 +25,6 @@ class CommentsController < ApplicationController
             @comment = Comment.find(params[:id])
             if @comment.post_id != params[:post_id].to_i
                 render json: {error: "This comment does not belong to this post"}
-            # the post must be public or the owner of the post is my friend
             elsif User.are_friends? params[:user_id].to_i, @comment.post.user_id or @comment.post.is_public
                 render json: @comment
             else
@@ -39,12 +37,10 @@ class CommentsController < ApplicationController
     end
 
     def create
-        # check if the post is public or the post owner and the current user are friends
         begin
             @post = Post.find(params[:post_id])
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @comment = @post.comments.create(comment_params) 
-                # put the comment owner to be the current user
                 if @comment.update(user_id: params[:user_id].to_i)  
                     render json: @comment
                 else
@@ -64,7 +60,7 @@ class CommentsController < ApplicationController
             @comment = Comment.find(params[:id])
             if @comment.post_id != params[:post_id].to_i
                 render json: {error: "This comment does not belong to this post"}
-            elsif params[:user_id].to_i == @comment.post.user_id or params[:user_id].to_i == @comment.user_id  # post owner or comment owner only can edit
+            elsif params[:user_id].to_i == @comment.post.user_id or params[:user_id].to_i == @comment.user_id
                 if @comment.update(comment_params)  
                     render json: @comment
                 else
@@ -84,9 +80,8 @@ class CommentsController < ApplicationController
             @comment = Comment.find(params[:id])
             if @comment.post_id != params[:post_id].to_i
                 render json: {error: "This comment does not belong to this post"}
-            elsif params[:user_id].to_i == @comment.post.user_id or params[:user_id].to_i == @comment.user_id  # post owner or comment owner only can delete
+            elsif params[:user_id].to_i == @comment.post.user_id or params[:user_id].to_i == @comment.user_id
                 @comment.destroy
-                redirect_to user_post_comments_path(user_id: params[:user_id], post_id: params[:post_id])
             else
                 render json: {error: "You does not have access to delete this comment"}
             end
