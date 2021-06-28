@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Navbar } from "react-bootstrap";
-import { Nav } from "react-bootstrap";
 
 
 // Views 
@@ -17,6 +15,8 @@ import Friends from './views/Friends.js';
 import FriendRequests from './views/FriendRequests.js';
 import Comments from './views/Comments.js';
 import Reactions from './views/Reactions.js';
+import EditPostForm  from './components/EditPostForm.js';
+import EditCommentForm  from './components/EditCommentForm.js';
 class App extends Component {
   render() {
     return (
@@ -33,8 +33,10 @@ class App extends Component {
               <Route path="/profile" component={MyProfile} />
               <Route path="/friends" component={Friends} />
               <Route path="/friendRequests" component={FriendRequests} />
+              <Route path="/posts/:postId/comments/:commentId" component={EditCommentForm} />
               <Route path="/posts/:postId/comments" component={Comments} />
               <Route path="/posts/:postId/reactions" component={Reactions} />
+              <Route path="/posts/:postId/edit" component={EditPostForm} />      
             </Switch>
           </Router>
         </React.StrictMode>

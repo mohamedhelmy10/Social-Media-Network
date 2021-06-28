@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Form } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import Bar from './Bar.js'; 
 import { createUser } from '../api/users.js'; 
@@ -22,7 +21,7 @@ class SignUp extends Component{
               marital_status: false,
               about_me: ''
           },
-          redirect: null
+          redirect: ''
 
         }
       }
@@ -37,8 +36,14 @@ class SignUp extends Component{
       }
 
       handleSubmit= (e)=> {
-        e.preventDefault()
-        createUser.call(this)
+        e.preventDefault();
+        let data = createUser(this.state.user);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error);
+            else
+                this.setState({redirect: '/log-in'});
+        });
 
       }
     render(){

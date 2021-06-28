@@ -3,10 +3,9 @@ class NotificationsController < ApplicationController
     #before_action :authorized
     def index 
         begin
-            # the current user only can see the notifications on his posts
             @user = User.find(params[:user_id])
             if (@user.id == 5)
-                @posts = @user.posts # posts of the current user
+                @posts = @user.posts
                 @notifications = []
                 @posts.each do |post|
                     @notifications.push post.notifications
@@ -36,11 +35,9 @@ class NotificationsController < ApplicationController
     end
 
     def create
-        # create notification when another user comment or react to my posts
         begin
             @post = Post.find(params[:post_id])
             @notification = @post.notifications.create(notification_params) 
-            # put the notification owner to be the user who react or comment on my posts
             if @notification.update(user_id: params[:user_id].to_i)  
                 render json: @notification
             else
