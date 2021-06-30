@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Friend from '../components/Friend.js';
-import  HomeBar from './homeBar.js';
-import {getRequests} from '../api/friends.js';
+import  FriendRequest from '../components/FriendRequest.js';
+import   HomeBar from './homeBar.js';
+import  { getRequests } from '../api/friends.js';
 
 class FriendRequests extends Component{
     constructor(props) {
@@ -12,13 +12,23 @@ class FriendRequests extends Component{
     }
     
     componentDidMount() {
-        getRequests.call(this);
+        let data = getRequests();
+
+        data.then(result => {
+            console.log(result);
+            if (result){
+                if (result.error)
+                    alert (result.error)
+                else
+                    this.setState({requests : result.data});
+            }
+        });
     }
 
-    renderRequest() {
+    renderRequest() {  
         return this.state.requests.map((request, index) => (
             <div>
-                <Friend key={index} friend={request}/>
+                <FriendRequest key={index} friend={request}/>
             </div>
         ));
     }
