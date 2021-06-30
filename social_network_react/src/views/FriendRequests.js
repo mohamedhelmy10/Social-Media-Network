@@ -13,7 +13,9 @@ class FriendRequests extends Component{
     
     componentDidMount() {
         let data = getRequests();
+
         data.then(result => {
+            console.log(result);
             if (result){
                 if (result.error)
                     alert (result.error)
