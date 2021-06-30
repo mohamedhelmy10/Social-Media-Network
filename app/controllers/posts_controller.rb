@@ -35,7 +35,7 @@ class PostsController < ApplicationController
         begin
             @user = User.find(params[:user_id])
             @post = @user.posts.create(post_params)
-            render json: PostSerializer.new(@post)
+            render json: {post: PostSerializer.new(@post), user: UserSerializer.new(@post.user)}
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist to add a post"} 
             return

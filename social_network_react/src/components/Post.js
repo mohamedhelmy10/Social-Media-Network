@@ -21,12 +21,10 @@ class Post extends Component{
         e.preventDefault();
         let data = deletePost(this.state.post.id);
         data.then(result=>{
-            if (result){
-                if(result.error)
-                    alert(result.error);
-                else
-                    this.setState({mode:"deleted"});   
-            }
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({mode:"deleted"});   
         });
     }
     handleEditClick= (e)=> {

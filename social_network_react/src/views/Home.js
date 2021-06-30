@@ -17,6 +17,7 @@ class Home extends Component{
     componentDidMount() {
         let data = getPosts();
         data.then(result=>{
+            console.log(result)
             if (result){
                 if(result.error)
                     alert(result.error);
@@ -26,10 +27,9 @@ class Home extends Component{
         });
     }
     handleChange = (event) => {
-
         this.setState(prevState => {
             let post = Object.assign({}, prevState.post);
-            post.attributes[event.target.name] = event.target.value; 
+            post[event.target.name] = event.target.value; 
             return { post };                                
         })
     }
@@ -41,6 +41,7 @@ class Home extends Component{
                 if(result.error)
                     alert(result.error);
                 else{
+                    console.log(this.state.postsAndUsers);
                     var newPostsAndUsers = this.state.postsAndUsers;
                     newPostsAndUsers.push(result);
                     this.setState({postsAndUsers: newPostsAndUsers, post:{}});
@@ -65,13 +66,13 @@ class Home extends Component{
             <div className="col-md-4" className="posts">
             <Form  id="create-post-form" onSubmit={this.handleSubmit}>
                 <Form.Group controlId="formBasicFirstName">
-                    <Form.Control type="textarea" placeholder="Write what you think"  style={{ height: 200, textAlign: 'center' }}  name = "caption" onChange={this.handleChange} />
+                    <Form.Control type="textarea" placeholder="Write what you think" style={{ height: 200, textAlign: 'center' }} name="caption" onChange={this.handleChange} />
                 </Form.Group> 
                 <Form.Group controlId="formBasicGender">
                     <Form.Label>Public</Form.Label>
-                    <Form.Control as="select" name = "is_public" onChange={this.handleChange} style={{ width: 60 }}  >
-                        <option>True</option>
-                        <option>False</option>
+                    <Form.Control as="select"  name = "is_public" onChange={this.handleChange} style={{ width: 60 }}  >
+                        <option value="true" selected="selected">True</option>
+                        <option value="false">False</option>
                     </Form.Control>
                 </Form.Group>
                 

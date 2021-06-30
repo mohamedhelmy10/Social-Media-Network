@@ -17,12 +17,10 @@ class Friend extends Component{
         e.preventDefault();
         let data = removeRequestOrFriend(this.props.friend.id);
         data.then(result=>{
-            if (result){
-                if (result.error)
-                    alert(result.error);
-                else
-                    this.setState({status:"declined"});
-            }
+            if (result.error)
+                alert(result.error);
+            else
+                this.setState({status:"declined"});
         });
     }
 
