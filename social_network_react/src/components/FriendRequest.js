@@ -1,17 +1,31 @@
 import React, { Component } from 'react'
 import { Nav, Button, Row, Col} from "react-bootstrap";
-import {removeRequestOrFriend} from "../api/friends.js"
+import {removeRequestOrFriend} from "../api/friends.js";
+import {acceptFriendRequest} from "../api/friends.js";
 
 
-class Friend extends Component{
+class FriendRequest extends Component{
     constructor(props) {
         super(props)
         this.state={
-            status:""
+            status: ""
         }
+        this.handleAcceptClick = this.handleAcceptClick.bind(this);
         this.handleRemoveClick = this.handleRemoveClick.bind(this); 
     }
 
+    handleAcceptClick= (e)=> {
+        e.preventDefault();
+        let data = acceptFriendRequest(this.props.friend.id);
+        data.then(result=>{
+            if (result){
+                if (result.error)
+                    alert(result.error)  
+                else
+                    this.setState({status:"accepted"});
+            }     
+        });
+    }
 
     handleRemoveClick= (e)=> {
         e.preventDefault();
@@ -21,19 +35,18 @@ class Friend extends Component{
                 if (result.error)
                     alert(result.error);
                 else
-                    this.setState({status:"declined"});
-            }
+                    this.setState({status:"declined"});   
+            } 
         });
     }
 
     render(){
-        if(this.state.status=="declined"){
+        if(this.state.status=="declined" || this.state.status=="accepted"){
             return (   
                 <div> 
                 </div>
             );
         }
-            
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
         if (currUserId == this.props.friend.id)
@@ -52,6 +65,9 @@ class Friend extends Component{
                     </Col>
                     <Col>
                         <div className="buttonsList">
+                            <Button  variant="outline-light" size="sm" onClick = {this.handleAcceptClick}>
+                                Accept
+                            </Button>;
                             <Button  variant="outline-light" size="sm" onClick = {this.handleRemoveClick}>
                                 Remove
                             </Button>
@@ -64,4 +80,4 @@ class Friend extends Component{
     }
 }
 
-export default Friend;  
+export default FriendRequest;  
