@@ -29,7 +29,15 @@ class LogIn extends Component{
 
       handleSubmit= (e)=> {
         e.preventDefault()
-        userLogin.call(this);
+        let data = userLogin(this.state.user);
+        data.then(result=>{
+            if (result.error)
+                alert(result.error);
+            else{
+                localStorage.setItem('currUserId', result.user.data.id);
+                this.setState({ redirect: "/home" });
+            }    
+        });
       }
 
       componentDidMount() {

@@ -13,14 +13,20 @@ class Reactions extends Component{
     
     componentDidMount() {
         const postId = this.props.match.params.postId;
-        getReactions.call(this,postId );
+        let data = getReactions(postId );
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else
+                this.setState({reactionsAndUsers: result}); 
+        });
     }
 
 
     renderReaction() {
         return this.state.reactionsAndUsers.map((reactionAndUser, index) => (
             <div>
-                <Reaction key={index} reaction={reactionAndUser.reaction} user= {reactionAndUser.user}/>
+                <Reaction key={index} reaction={reactionAndUser.reaction.data} user= {reactionAndUser.user.data}/>
             </div>
         ));
     }

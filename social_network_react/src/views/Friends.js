@@ -12,7 +12,13 @@ class Friends extends Component{
     }
     
     componentDidMount() {
-        getFriends.call(this);
+        let data = getFriends();
+        data.then( result => {
+            if (result.error)
+                alert(result.error);
+            else
+                this.setState({friends: result.data});
+        });
     }
 
     renderFriend() {
