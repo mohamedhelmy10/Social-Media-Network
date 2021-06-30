@@ -1,11 +1,8 @@
 class ApplicationController < ActionController::Base
     helper_method :current_user, :logged_in?
-    #before_action :authorized
-    @rsa_public
+    before_action :authorized
     def encode_token(payload)
-      rsa_private = OpenSSL::PKey::RSA.generate 2048
-      @rsa_public = rsa_private.public_key 
-      JWT.encode(payload, rsa_private, 'RS256')
+      JWT.encode(payload, ENV["HMAC_SECRET"], 'HS256')
     end
   
     def auth_header
@@ -18,7 +15,7 @@ class ApplicationController < ActionController::Base
         token = auth_header.split(' ')[1]
         # header: { 'Authorization': 'Bearer <token>' }
         begin
-          JWT.decode(token, @rsa_public, true, algorithm: 'RS256')
+          JWT.decode(token, ENV["HMAC_SECRET"], true, algorithm: 'HS256')
         rescue JWT::DecodeError
           nil
         end
