@@ -6,6 +6,9 @@ import {removeRequestOrFriend} from "../api/friends.js"
 class Friend extends Component{
     constructor(props) {
         super(props)
+        this.state={
+            status:""
+        }
         this.handleRemoveClick = this.handleRemoveClick.bind(this); 
     }
 
@@ -16,10 +19,19 @@ class Friend extends Component{
         data.then(result=>{
             if (result.error)
                 alert(result.error);
+            else
+                this.setState({status:"declined"});
         });
     }
 
     render(){
+        if(this.state.status=="declined"){
+            return (   
+                <div> 
+                </div>
+            );
+        }
+            
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
         if (currUserId == this.props.friend.id)

@@ -7,6 +7,9 @@ import {acceptFriendRequest} from "../api/friends.js";
 class FriendRequest extends Component{
     constructor(props) {
         super(props)
+        this.state={
+            status: ""
+        }
         this.handleAcceptClick = this.handleAcceptClick.bind(this);
         this.handleRemoveClick = this.handleRemoveClick.bind(this); 
     }
@@ -16,7 +19,9 @@ class FriendRequest extends Component{
         let data = acceptFriendRequest(this.props.friend.id);
         data.then(result=>{
             if (result.error)
-                alert(result.error)    
+                alert(result.error)  
+            else
+                this.setState({status:"accepted"});     
         });
     }
 
@@ -26,10 +31,18 @@ class FriendRequest extends Component{
         data.then(result=>{
             if (result.error)
                 alert(result.error);
+            else
+                this.setState({status:"declined"});    
         });
     }
 
     render(){
+        if(this.state.status=="declined" || this.state.status=="accepted"){
+            return (   
+                <div> 
+                </div>
+            );
+        }
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
         if (currUserId == this.props.friend.id)

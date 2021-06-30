@@ -23,19 +23,11 @@ class Home extends Component{
                 this.setState({postsAndUsers: result}); 
         });
     }
-
-    renderPosts() {
-        return this.state.postsAndUsers.map((postAndUser, index) => (
-            <div>
-                <Post key={index} post={postAndUser.post.data} user={postAndUser.user.data}/>
-            </div>
-        ));
-    }
     handleChange = (event) => {
 
         this.setState(prevState => {
             let post = Object.assign({}, prevState.post);
-            post[event.target.name] = event.target.value; 
+            post.attributes[event.target.name] = event.target.value; 
             return { post };                                
         })
     }
@@ -45,7 +37,20 @@ class Home extends Component{
         data.then(result=>{
             if(result.error)
                 alert(result.error);
+            else{
+                var newPostsAndUsers = this.state.postsAndUsers;
+                newPostsAndUsers.push(result);
+                this.setState({postsAndUsers: newPostsAndUsers, post:{}});
+            }
         });
+    }
+
+    renderPosts() {
+        return this.state.postsAndUsers.map((postAndUser, index) => (
+            <div>
+                <Post key={index} post={postAndUser.post.data} user={postAndUser.user.data}/>
+            </div>
+        ));
     }
 
 
@@ -54,7 +59,7 @@ class Home extends Component{
             <div>
                 <HomeBar/>
             <div className="col-md-4" className="posts">
-            <Form onSubmit={this.handleSubmit}>
+            <Form  id="create-post-form" onSubmit={this.handleSubmit}>
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Control type="textarea" placeholder="Write what you think"  style={{ height: 200, textAlign: 'center' }}  name = "caption" onChange={this.handleChange} />
                 </Form.Group> 

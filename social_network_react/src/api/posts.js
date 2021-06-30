@@ -60,8 +60,8 @@ export async function deletePost(postId){
 export async function updatePost(post){
   try {
       const currUserId = localStorage.getItem('currUserId');
-      let response = await axios.put("http://localhost:3000/api/v1/users/"+currUserId+"/posts/"+post.id, post);
-      let data = await response;
+      let response = await axios.put("http://localhost:3000/api/v1/users/"+currUserId+"/posts/"+post.id, post.attributes);
+      let data = await response.data;
       return data;
   } catch (error) {
       alert(error);

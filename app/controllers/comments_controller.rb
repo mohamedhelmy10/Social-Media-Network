@@ -42,7 +42,7 @@ class CommentsController < ApplicationController
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @comment = @post.comments.create(comment_params) 
                 if @comment.update(user_id: params[:user_id].to_i)  
-                    render json: CommentSerializer.new(@comment)
+                    render json: {comment: CommentSerializer.new(@comment), user: UserSerializer.new(@comment.user)}
                 else
                     render json: @comment.errors, status: :unprocessable_entity
                 end

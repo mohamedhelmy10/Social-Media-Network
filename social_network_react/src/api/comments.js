@@ -47,7 +47,7 @@ export async function deleteComment(postId, commentId){
   export async function updateComment(comment){
     try {
         const currUserId = localStorage.getItem('currUserId');
-        let response = await axios.put("http://localhost:3000/api/v1/users/"+currUserId+"/posts/"+comment.post_id+"/comments/"+comment.id, comment);
+        let response = await axios.put("http://localhost:3000/api/v1/users/"+currUserId+"/posts/"+comment.attributes.post_id+"/comments/"+comment.id, comment.attributes);
         let data = await response.data;
         return data;
     } catch (error) {

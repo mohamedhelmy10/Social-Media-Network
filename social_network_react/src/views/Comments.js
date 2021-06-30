@@ -10,8 +10,7 @@ class Comments extends Component{
         super(props)
         this.state = {
             commentsAndUsers: [],
-            post: {},
-            redirect: ''
+            comment: {}
         }   
     }
     
@@ -25,7 +24,6 @@ class Comments extends Component{
                 this.setState({commentsAndUsers: result})    
         });
     }
-
     handleChange = (event) => {
 
         this.setState(prevState => {
@@ -41,6 +39,12 @@ class Comments extends Component{
         data.then(result=>{
             if(result.error)
                 alert(result.error);
+            else{
+                var newCommentsAndUsers = this.state.commentsAndUsers;
+                newCommentsAndUsers.push(result);
+                this.setState({commentsAndUsers:newCommentsAndUsers, comment:{}});
+            }
+                
         });
     }
 
@@ -60,7 +64,7 @@ class Comments extends Component{
             <div className="col-md-4" className="comment">
             <Form onSubmit={this.handleSubmit}>
                 <Form.Group controlId="formBasicFirstName">
-                    <Form.Control type="textarea" placeholder="Add your comment"  style={{ height: 200 , textAlign: "center"}}  name = "body" onChange={this.handleChange} />
+                    <Form.Control type="textarea"  placeholder="Add your comment"  style={{ height: 200 , textAlign: "center"}}  name = "body" onChange={this.handleChange} />
                 </Form.Group>             
                 <Button variant="primary" type="submit">
                     Add Comment

@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { Nav } from "react-bootstrap";
-import { Redirect} from "react-router-dom";
-import Button from "react-bootstrap/Button";
+import { Form, Button, Nav} from "react-bootstrap";
 import {deleteComment} from '../api/comments.js';
+import {updateComment} from '../api/comments.js';
 
 class Comment extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            comment: {},
-            redirect:''
+            comment: this.props.comment,
+            mode: "view"
         }
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.handleEditClick = this.handleEditClick.bind(this);
@@ -21,39 +20,89 @@ class Comment extends Component{
         data.then(result=>{
             if(result.error)
                 alert(result.error);
+            else
+                this.setState({mode: "deleted"}); 
         });
     }
     handleEditClick= (e)=> {
         e.preventDefault();
-        const path = "/posts/"+ this.props.comment.attributes.post_id + "/comments/"+this.props.comment.id;
-        this.setState({redirect: path});    
+        this.setState({mode: "edit"});    
     }
 
-    render(){
-        if (this.state.redirect) {
-            return(
-                <div>
-                    <Redirect to={this.state.redirect} />
-                </div>
-            );
-        }
+    handleChange = (event) => {
+        this.setState(prevState => {
+            let comment = Object.assign({}, prevState.comment);
+            comment.attributes[event.target.name] = event.target.value; 
+            return { comment };                                
+        })
+    }
+    handleSubmit= (e)=> {
+        e.preventDefault();
+        let data = updateComment(this.state.comment);
+        data.then(result=>{
+            if(result.error)
+                alert(result.error);
+            else{
+                this.setState({ comment: result.data , mode: "view"});  
+            }    
+        });
+    }
+
+
+    renderViewComment(){
         const currUserId = localStorage.getItem('currUserId');
+        const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
         var profilePath;
         if (currUserId == this.props.user.id)
              profilePath = "/profile";
         else
              profilePath = "/profile/"+this.props.user.id;
              
-        const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
-
-        return (   
-            <div className="comment">  
+        return (
+            <div className="comment">
                 <Nav className="flex-column" className="userName">
                     <Nav.Link href={profilePath}>{userName}</Nav.Link>
                 </Nav>
                 <div className="content">
-                    <h2 className ="data">{this.props.comment.attributes.body}</h2>
+                    <h2 className ="data">{this.state.comment.attributes.body}</h2>
                 </div>
+                {this.renderEditDeleteButtons()}
+            </div>
+        );
+    }
+    renderEditComment(){
+        return (
+            <div className="comment">
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Group controlId="formBasicFirstName" className="content">
+                        <Form.Control type="textarea" value={this.state.comment.attributes.body} style={{ height: 200 , textAlign: "center"}}  name = "body" onChange={this.handleChange} />
+                    </Form.Group>             
+                    <Button variant="primary" type="submit" className="button">
+                        Update Comment
+                    </Button> 
+                </Form>
+            </div>
+        );
+    }
+    renderViewOrEditComment(){
+        if(this.state.mode=="view"){
+            return(
+                <div>
+                    {this.renderViewComment()}
+                </div>
+            );
+        }else if(this.state.mode=="edit"){
+            return(
+                <div>
+                    {this.renderEditComment()}
+                </div>
+            );
+        }
+    }
+    renderEditDeleteButtons(){
+        const currUserId = localStorage.getItem('currUserId');
+        if (currUserId == this.props.user.id) {
+            return(
                 <div className="buttonsList">
                     <Button  variant="outline-light" size="sm" onClick = {this.handleEditClick}>
                         Edit Comment
@@ -62,6 +111,14 @@ class Comment extends Component{
                         Delete Comment
                     </Button>
                 </div>
+            );
+        }
+    }
+
+    render(){
+        return (   
+            <div>  
+                {this.renderViewOrEditComment()}
             </div>  
         );
     }

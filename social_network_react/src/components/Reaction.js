@@ -6,7 +6,8 @@ class Reaction extends Component{
     constructor(props) {
         super(props)
         this.state ={
-            reaction: this.props.reaction
+            reaction: this.props.reaction,
+            status: ""
         }
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.handleEditClick = this.handleEditClick.bind(this);
@@ -21,17 +22,28 @@ class Reaction extends Component{
     handleDeleteClick= (e)=> {
         e.preventDefault();
         deleteReaction(this.state.reaction.attributes.post_id, this.state.reaction.id);
+        this.setState({status:"declined"});
     }
     handleEditClick= (e)=> {
         e.preventDefault();
         let data = updateReaction(this.state.reaction);
         data.then(result=>{
+            console.log(result);
             if(result.error)
-                alert(result.error);    
+                alert(result.error); 
+            else 
+                this.setState({reaction:result.data});
         });
     }
     
     render(){ 
+        if(this.state.status=="declined"){
+            return (   
+                <div>  
+                </div>
+            );
+        }
+        
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
         if (currUserId == this.props.user.id)

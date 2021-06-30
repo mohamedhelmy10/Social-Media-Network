@@ -9,7 +9,8 @@ class MyProfile extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            postsAndUser: []
+            postsAndUser: [],
+            post:{}
         }
     }
 
@@ -47,6 +48,11 @@ class MyProfile extends Component{
         data.then(result=>{
             if(result.error)
                 alert(result.error);
+            else{
+                var newPostsAndUser = this.state.postsAndUser;
+                newPostsAndUser.push(result);
+                this.setState({postsAndUser: newPostsAndUser, post:{}});
+            }
         });
     }
 
