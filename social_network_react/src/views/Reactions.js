@@ -15,10 +15,12 @@ class Reactions extends Component{
         const postId = this.props.match.params.postId;
         let data = getReactions(postId );
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({reactionsAndUsers: result}); 
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({reactionsAndUsers: result}); 
+            }
         });
     }
 

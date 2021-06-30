@@ -14,10 +14,12 @@ class Friends extends Component{
     componentDidMount() {
         let data = getFriends();
         data.then( result => {
-            if (result.error)
-                alert(result.error);
-            else
-                this.setState({friends: result.data});
+            if (result){
+                if (result.error)
+                    alert(result.error);
+                else
+                    this.setState({friends: result.data});
+            }
         });
     }
 

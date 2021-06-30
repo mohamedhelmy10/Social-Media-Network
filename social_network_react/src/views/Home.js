@@ -17,10 +17,12 @@ class Home extends Component{
     componentDidMount() {
         let data = getPosts();
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({postsAndUsers: result}); 
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({postsAndUsers: result}); 
+            }
         });
     }
     handleChange = (event) => {
@@ -35,12 +37,14 @@ class Home extends Component{
         e.preventDefault()
         let data = createPost(this.state.post);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else{
-                var newPostsAndUsers = this.state.postsAndUsers;
-                newPostsAndUsers.push(result);
-                this.setState({postsAndUsers: newPostsAndUsers, post:{}});
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else{
+                    var newPostsAndUsers = this.state.postsAndUsers;
+                    newPostsAndUsers.push(result);
+                    this.setState({postsAndUsers: newPostsAndUsers, post:{}});
+                }
             }
         });
     }

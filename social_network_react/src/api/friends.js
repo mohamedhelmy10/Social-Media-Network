@@ -1,11 +1,14 @@
 import axios from 'axios';
-import Friend from '../components/Friend';
-import { currUser } from './users';
 
 export async function getFriends() {
   try {
+      const token = localStorage.getItem('token');
       const currUserId = localStorage.getItem('currUserId');
-      let response = await axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/friends');
+      let response = await axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/friends',{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       let data = await response.data;
       return data;
   } catch (error) {
@@ -15,8 +18,13 @@ export async function getFriends() {
 
 export async function getRequests() {
     try {
+        const token = localStorage.getItem('token');
         const currUserId = localStorage.getItem('currUserId');
-        let response = await axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations');
+        let response = await axios.get('http://localhost:3000/api/v1/users/'+currUserId+'/invitations',{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         let data = await response.data;
         return data;
     } catch (error) {
@@ -25,8 +33,13 @@ export async function getRequests() {
 }
 export async function removeRequestOrFriend(friendId) {
   try {
+      const token = localStorage.getItem('token');
       const currUserId = localStorage.getItem('currUserId');
-      let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+friendId);
+      let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/destroy/'+friendId,{},{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       let data = await response.data;
       return data;  
   } catch (error) {
@@ -36,8 +49,13 @@ export async function removeRequestOrFriend(friendId) {
 
 export async function acceptFriendRequest(friendId) {
   try {
+      const token = localStorage.getItem('token');
       const currUserId = localStorage.getItem('currUserId');
-      let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId);
+      let response = await axios.put('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId,{},{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       let data = await response.data;
       return data;
   } catch (error) {
@@ -47,8 +65,14 @@ export async function acceptFriendRequest(friendId) {
 
 export async function sendFriendRequest(friendId) {
   try {
+      const token = localStorage.getItem('token');
+      console.log(token);
       const currUserId = localStorage.getItem('currUserId');
-      let response = await axios.post('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId);
+      let response = await axios.post('http://localhost:3000/api/v1/users/'+currUserId+'/invitations/'+friendId,{},{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       let data = await response.data;
       return data;
   } catch (error) {

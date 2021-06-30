@@ -18,10 +18,12 @@ class MyProfile extends Component{
         const userId = localStorage.getItem('currUserId');
         let data = getProfilePosts(userId);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({postsAndUser: result}); 
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({postsAndUser: result}); 
+            }
         });
     }
 
@@ -46,12 +48,14 @@ class MyProfile extends Component{
         e.preventDefault()
         let data = createPost(this.state.post);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else{
-                var newPostsAndUser = this.state.postsAndUser;
-                newPostsAndUser.push(result);
-                this.setState({postsAndUser: newPostsAndUser, post:{}});
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else{
+                    var newPostsAndUser = this.state.postsAndUser;
+                    newPostsAndUser.push(result);
+                    this.setState({postsAndUser: newPostsAndUser, post:{}});
+                }
             }
         });
     }

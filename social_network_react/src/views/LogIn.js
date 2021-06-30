@@ -31,17 +31,21 @@ class LogIn extends Component{
         e.preventDefault()
         let data = userLogin(this.state.user);
         data.then(result=>{
-            if (result.error)
-                alert(result.error);
-            else{
-                localStorage.setItem('currUserId', result.user.data.id);
-                this.setState({ redirect: "/home" });
-            }    
+            if (result){
+                if (result.error)
+                    alert(result.error);
+                else{
+                    localStorage.setItem('currUserId', result.user.data.id);
+                    localStorage.setItem('token', result.token);
+                    this.setState({ redirect: "/home" });
+                }  
+            }  
         });
       }
 
       componentDidMount() {
         localStorage.removeItem('currUserId');
+        localStorage.removeItem('token');
         localStorage.clear();
       }
 

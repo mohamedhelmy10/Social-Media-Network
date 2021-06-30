@@ -28,11 +28,12 @@ class Reaction extends Component{
         e.preventDefault();
         let data = updateReaction(this.state.reaction);
         data.then(result=>{
-            console.log(result);
-            if(result.error)
-                alert(result.error); 
-            else 
-                this.setState({reaction:result.data});
+            if (result){
+                if(result.error)
+                    alert(result.error); 
+                else 
+                    this.setState({reaction:result.data});
+            }
         });
     }
     

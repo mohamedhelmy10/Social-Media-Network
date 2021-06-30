@@ -1,6 +1,6 @@
   class UsersController < ApplicationController
     protect_from_forgery prepend: true
-    #before_action :authorized, except: [:create, :login]
+    before_action :authorized, except: [:create, :login]
 
   def index
     @users = User.all

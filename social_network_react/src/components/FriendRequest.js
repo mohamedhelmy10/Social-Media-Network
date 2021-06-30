@@ -18,10 +18,12 @@ class FriendRequest extends Component{
         e.preventDefault();
         let data = acceptFriendRequest(this.props.friend.id);
         data.then(result=>{
-            if (result.error)
-                alert(result.error)  
-            else
-                this.setState({status:"accepted"});     
+            if (result){
+                if (result.error)
+                    alert(result.error)  
+                else
+                    this.setState({status:"accepted"});
+            }     
         });
     }
 
@@ -29,10 +31,12 @@ class FriendRequest extends Component{
         e.preventDefault();
         let data = removeRequestOrFriend(this.props.friend.id);
         data.then(result=>{
-            if (result.error)
-                alert(result.error);
-            else
-                this.setState({status:"declined"});    
+            if (result){
+                if (result.error)
+                    alert(result.error);
+                else
+                    this.setState({status:"declined"});   
+            } 
         });
     }
 

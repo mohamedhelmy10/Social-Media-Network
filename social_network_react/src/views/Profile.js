@@ -17,10 +17,12 @@ class Profile extends Component{
         const userId = this.props.match.params.profileId;
         let data = getProfilePosts(userId);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({postsAndUser: result}); 
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({postsAndUser: result}); 
+            }
         });
     }
 
@@ -38,8 +40,10 @@ class Profile extends Component{
         e.preventDefault();
         let data = sendFriendRequest(user.id);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
+            if (result){
+                if(result.error)
+                    alert(result.error);
+            }
         });
     }
     render(){

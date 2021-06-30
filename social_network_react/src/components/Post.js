@@ -21,10 +21,12 @@ class Post extends Component{
         e.preventDefault();
         let data = deletePost(this.state.post.id);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({mode:"deleted"});   
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({mode:"deleted"});   
+            }
         });
     }
     handleEditClick= (e)=> {
@@ -51,18 +53,22 @@ class Post extends Component{
         const postId = this.props.post.id;
         let data = createReaction(postId, this.state.reaction);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);    
+            if (result){
+                if(result.error)
+                    alert(result.error);  
+            }  
         });
     }
     handleUpdatePost= (e)=> {
         e.preventDefault()
         let data = updatePost(this.state.post);
         data.then(result=>{
-            if (result.error)
-                alert(result.error);
-            else
-                this.setState({post: result.data, mode: "view"});
+            if (result){
+                if (result.error)
+                    alert(result.error);
+                else
+                    this.setState({post: result.data, mode: "view"});
+            }
         });
     }
     renderViewOrEditPost(){

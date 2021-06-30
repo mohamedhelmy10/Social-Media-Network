@@ -14,10 +14,12 @@ class FriendRequests extends Component{
     componentDidMount() {
         let data = getRequests();
         data.then(result => {
-            if (result.error)
-                alert (result.error)
-            else
-                this.setState({requests : result.data});
+            if (result){
+                if (result.error)
+                    alert (result.error)
+                else
+                    this.setState({requests : result.data});
+            }
         });
     }
 

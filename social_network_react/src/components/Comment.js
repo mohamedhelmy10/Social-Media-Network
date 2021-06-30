@@ -18,10 +18,12 @@ class Comment extends Component{
         e.preventDefault();
         let data = deleteComment(this.props.comment.attributes.post_id, this.props.comment.id);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({mode: "deleted"}); 
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({mode: "deleted"}); 
+            }
         });
     }
     handleEditClick= (e)=> {
@@ -40,11 +42,13 @@ class Comment extends Component{
         e.preventDefault();
         let data = updateComment(this.state.comment);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else{
-                this.setState({ comment: result.data , mode: "view"});  
-            }    
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else{
+                    this.setState({ comment: result.data , mode: "view"});  
+                }   
+            } 
         });
     }
 

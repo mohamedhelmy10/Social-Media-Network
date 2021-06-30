@@ -18,10 +18,12 @@ class Comments extends Component{
         const postId = this.props.match.params.postId;
         let data = getComments(postId);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else
-                this.setState({commentsAndUsers: result})    
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else
+                    this.setState({commentsAndUsers: result})
+            }    
         });
     }
     handleChange = (event) => {
@@ -37,12 +39,14 @@ class Comments extends Component{
         const postId = this.props.match.params.postId;
         let data = createComment(postId, this.state.comment);
         data.then(result=>{
-            if(result.error)
-                alert(result.error);
-            else{
-                var newCommentsAndUsers = this.state.commentsAndUsers;
-                newCommentsAndUsers.push(result);
-                this.setState({commentsAndUsers:newCommentsAndUsers, comment:{}});
+            if (result){
+                if(result.error)
+                    alert(result.error);
+                else{
+                    var newCommentsAndUsers = this.state.commentsAndUsers;
+                    newCommentsAndUsers.push(result);
+                    this.setState({commentsAndUsers:newCommentsAndUsers, comment:{}});
+                }
             }
                 
         });

@@ -39,10 +39,12 @@ class SignUp extends Component{
         e.preventDefault();
         let data = createUser(this.state.user);
         data.then(result=>{
-            if (result.error)
-                alert(result.error);
-            else
-                this.setState({redirect: '/log-in'});
+            if (result){
+                if (result.error)
+                    alert(result.error);
+                else
+                    this.setState({redirect: '/log-in'});
+            }
         });
 
       }
