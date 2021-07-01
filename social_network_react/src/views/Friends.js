@@ -2,25 +2,31 @@ import React, { Component } from 'react';
 import Friend from '../components/Friend.js';
 import  HomeBar from './homeBar.js';
 import {getFriends} from '../api/friends.js';
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
 
 class Friends extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            friends: []
+            friends: [],
+            redirect: ""
         }
     }
     
     componentDidMount() {
-        let data = getFriends();
-        data.then( result => {
-            if (result){
-                if (result.error)
-                    alert(result.error);
-                else
-                    this.setState({friends: result.data});
-            }
-        });
+        if (localStorage.getItem('currUserId')){
+            let data = getFriends();
+            data.then( result => {
+                if (result){
+                    if (result.error)
+                        alert(result.error);
+                    else
+                        this.setState({friends: result.data});
+                }
+            });
+        }else
+            this.setState({redirect: '/log-in'});
     }
 
     renderFriend() {
@@ -31,6 +37,14 @@ class Friends extends Component{
         ));
     }
     render(){
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            );  
+        }
         return (
             <div>
                 <HomeBar/>

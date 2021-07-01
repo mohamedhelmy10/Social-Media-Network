@@ -1,6 +1,5 @@
 class InvitationsController < ApplicationController
     protect_from_forgery prepend: true
-    #before_action :authorized
     def index
         begin
             #current_user
@@ -65,8 +64,7 @@ class InvitationsController < ApplicationController
             @friend_request = Invitation.pending_invitation(params[:user_id].to_i, params[:id].to_i)
             if @friend_request.empty?
                 @friend_request = Invitation.accepted_invitation(params[:user_id].to_i, params[:id].to_i)
-            end
-            puts @friend_request    
+            end   
             if @friend_request.empty?
                 render json: {error: "You does not have access to decline this friend"}
             elsif @friend_request.update(status: :declined)

@@ -1,6 +1,5 @@
 class CommentsController < ApplicationController 
     protect_from_forgery prepend: true
-    #before_action :authorized
     def index 
         begin
             @comments_users = []

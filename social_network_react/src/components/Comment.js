@@ -55,7 +55,7 @@ class Comment extends Component{
         const currUserId = localStorage.getItem('currUserId');
         const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
         var profilePath;
-        if (currUserId == this.props.user.id)
+        if (currUserId === this.props.user.id)
              profilePath = "/profile";
         else
              profilePath = "/profile/"+this.props.user.id;
@@ -87,13 +87,13 @@ class Comment extends Component{
         );
     }
     renderViewOrEditComment(){
-        if(this.state.mode=="view"){
+        if(this.state.mode==="view"){
             return(
                 <div>
                     {this.renderViewComment()}
                 </div>
             );
-        }else if(this.state.mode=="edit"){
+        }else if(this.state.mode==="edit"){
             return(
                 <div>
                     {this.renderEditComment()}
@@ -103,7 +103,7 @@ class Comment extends Component{
     }
     renderEditDeleteButtons(){
         const currUserId = localStorage.getItem('currUserId');
-        if (currUserId == this.props.user.id) {
+        if (currUserId === this.props.user.id) {
             return(
                 <div className="buttonsList">
                     <Button  variant="outline-light" size="sm" onClick = {this.handleEditClick}>

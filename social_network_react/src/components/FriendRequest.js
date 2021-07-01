@@ -39,7 +39,7 @@ class FriendRequest extends Component{
     }
 
     render(){
-        if(this.state.status=="declined" || this.state.status=="accepted"){
+        if(this.state.status==="declined" || this.state.status==="accepted"){
             return (   
                 <div> 
                 </div>
@@ -47,7 +47,7 @@ class FriendRequest extends Component{
         }
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
-        if (currUserId == this.props.friend.id)
+        if (currUserId === this.props.friend.id)
              profilePath = "/profile";
         else
              profilePath = "/profile/"+this.props.friend.id;

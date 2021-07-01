@@ -34,9 +34,21 @@ class Reaction extends Component{
                 this.setState({reaction:result.data});
         });
     }
+    renderDeleteButton(){
+        const currUserId = localStorage.getItem('currUserId');
+        if (currUserId===this.props.user.id){
+            return(
+                <Col>
+                    <Button  variant="outline-light" size="sm" onClick = {this.handleDeleteClick} className="button">
+                        Delete
+                    </Button>
+                </Col>
+            );
+        }
+    }
     
     render(){ 
-        if(this.state.status=="declined"){
+        if(this.state.status==="declined"){
             return (   
                 <div>  
                 </div>
@@ -45,7 +57,7 @@ class Reaction extends Component{
         
         const currUserId = localStorage.getItem('currUserId');
         var profilePath;
-        if (currUserId == this.props.user.id)
+        if (currUserId === this.props.user.id)
              profilePath = "/profile";
         else
              profilePath = "/profile/"+this.props.user.id;
@@ -53,7 +65,7 @@ class Reaction extends Component{
         const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
         return (   
             <div className="reaction"> 
-                <Row>
+                <Row className="buttonsList">
                     <Col>
                         <Nav className="flex-column">
                             <Nav.Link href={profilePath} className="button">{userName}</Nav.Link>
@@ -62,6 +74,7 @@ class Reaction extends Component{
                     <Col>
                     <Form.Group controlId="formBasicGender">
                         <Form.Control as="select" name = "reaction_type" value= {this.state.reaction.attributes.reaction_type} onChange={this.handleChange} style={{ width: 60 }} onClick={this.handleEditClick} >
+                            <option disabled selected value>like</option>
                             <option>Like</option>
                             <option>Love</option>
                             <option>Haha</option>
@@ -70,11 +83,7 @@ class Reaction extends Component{
                         </Form.Control>
                     </Form.Group>
                     </Col>
-                    <Col>
-                        <Button  variant="outline-light" size="sm" onClick = {this.handleDeleteClick} className="button">
-                            Delete Reaction
-                        </Button>
-                    </Col>
+                    {this.renderDeleteButton()} 
                 </Row>
             </div>  
         );

@@ -4,27 +4,32 @@ import Post from '../components/Post.js';
 import  HomeBar from './homeBar.js';
 import {getPosts} from '../api/posts.js';
 import {createPost} from '../api/posts.js';
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
 
 class Home extends Component{
     constructor(props) {
         super(props)
         this.state = {
             postsAndUsers: [],
-            post: {}
+            post: {},
+            redirect: ""
         }
     }
     
     componentDidMount() {
-        let data = getPosts();
-        data.then(result=>{
-            console.log(result)
-            if (result){
-                if(result.error)
-                    alert(result.error);
-                else
-                    this.setState({postsAndUsers: result}); 
-            }
-        });
+        if (localStorage.getItem('currUserId')){
+            let data = getPosts();
+            data.then(result=>{
+                if (result){
+                    if(result.error)
+                        alert(result.error);
+                    else
+                        this.setState({postsAndUsers: result}); 
+                }
+            });
+        }else
+            this.setState({redirect: '/log-in'});
     }
     handleChange = (event) => {
         this.setState(prevState => {
@@ -41,9 +46,8 @@ class Home extends Component{
                 if(result.error)
                     alert(result.error);
                 else{
-                    console.log(this.state.postsAndUsers);
                     var newPostsAndUsers = this.state.postsAndUsers;
-                    newPostsAndUsers.push(result);
+                    newPostsAndUsers.unshift(result);
                     this.setState({postsAndUsers: newPostsAndUsers, post:{}});
                 }
             }
@@ -51,15 +55,24 @@ class Home extends Component{
     }
 
     renderPosts() {
-        return this.state.postsAndUsers.map((postAndUser, index) => (
-            <div>
-                <Post key={index} post={postAndUser.post.data} user={postAndUser.user.data}/>
+        return this.state.postsAndUsers.map((postAndUser) => (
+            <div key={postAndUser.post.data.id}>
+                <Post  post={postAndUser.post.data} user={postAndUser.user.data}/>
             </div>
         ));
     }
 
 
     render(){
+
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            );  
+        }
         return (
             <div>
                 <HomeBar/>
@@ -70,8 +83,9 @@ class Home extends Component{
                 </Form.Group> 
                 <Form.Group controlId="formBasicGender">
                     <Form.Label>Public</Form.Label>
-                    <Form.Control as="select"  name = "is_public" onChange={this.handleChange} style={{ width: 60 }}  >
-                        <option value="true" selected="selected">True</option>
+                    <Form.Control as="select" defaultValue="true" name = "is_public" onChange={this.handleChange} style={{ width: 60 }}  >
+                        <option disabled selected value>public</option>
+                        <option value="true">True</option>
                         <option value="false">False</option>
                     </Form.Control>
                 </Form.Group>

@@ -178,16 +178,17 @@ input[placeholder] {
 	margin: 10px; 
 }
 .reaction{
-	width: 60%;
+	width: 100%;
 	border-color: rgb(0, 0, 0);  
 	border-width: .15em;  
 	border-style: solid; 
-	margin: 10px;
+	margin: 2px;
 	position: center;
 }
 .button{
 	margin: 10px;
 	position: center;
+
 }
 
 .comment{
@@ -205,3 +206,34 @@ input[placeholder] {
 	margin: 5px;
 	text-align: center;
 }
+.reactionModal > .close {
+	cursor: pointer;
+	position: absolute;
+	display: block;
+	padding: 2px 5px;
+	line-height: 20px;
+	right: -10px;
+	top: -10px;
+	font-size: 24px;
+	background: #ffffff;
+	border-radius: 18px;
+	border: 1px solid #cfcece;
+}
+.reactionModal > .header {
+	width: 100%;
+	border-color: rgb(0, 0, 0);  
+	border-width: .15em;  
+	border-style: solid; 
+	margin: 2px;
+	text-align: center;
+  }
+  .reactionModal{
+	width: 100%;
+	border-color: rgb(0, 0, 0);  
+	border-width: .15em;  
+	border-style: solid; 
+	margin: 10px;
+	text-align: center;
+	padding: 10px;
+	background-color: rgb(0, 183, 255);
+  }

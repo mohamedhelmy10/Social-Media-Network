@@ -1,6 +1,5 @@
 class NotificationsController < ApplicationController
     protect_from_forgery prepend: true
-    #before_action :authorized
     def index 
         begin
             @user = User.find(params[:user_id])

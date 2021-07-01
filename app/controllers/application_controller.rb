@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-    helper_method :current_user, :logged_in?
+    helper_method :current_user
     before_action :authorized
     def encode_token(payload)
       JWT.encode(payload, ENV["HMAC_SECRET"], 'HS256')
@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
   
     def authorized
       render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+    end
+
+    def current_user
+      @user
     end
     
 end

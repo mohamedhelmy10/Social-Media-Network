@@ -37,11 +37,6 @@
     end
   end
 
-  def auto_login
-    render json: UserSerializer.new(@user)
-  end
-  
-
   def show
     begin
       @user = User.find(params[:id])
@@ -55,7 +50,7 @@
   def update
     begin
       @user = User.find(params[:id])
-      if 2 == @user.id 
+      if current_user.id == @user.id 
         if @user.update(user_params)
             render json: UserSerializer.new(@user)
         else

@@ -3,28 +3,34 @@ import Comment from '../components/Comment.js';
 import  HomeBar from './homeBar.js';
 import { Form, Button } from "react-bootstrap";
 import {getComments} from '../api/comments.js';
-import {createComment} from '../api/comments.js'
+import {createComment} from '../api/comments.js';
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
 
 class Comments extends Component{
     constructor(props) {
         super(props)
         this.state = {
             commentsAndUsers: [],
-            comment: {}
+            comment: {},
+            redirect: ""
         }   
     }
     
     componentDidMount() {
-        const postId = this.props.match.params.postId;
-        let data = getComments(postId);
-        data.then(result=>{
-            if (result){
-                if(result.error)
-                    alert(result.error);
-                else
-                    this.setState({commentsAndUsers: result})
-            }    
-        });
+        if (localStorage.getItem('currUserId')){
+            const postId = this.props.match.params.postId;
+            let data = getComments(postId);
+            data.then(result=>{
+                if (result){
+                    if(result.error)
+                        alert(result.error);
+                    else
+                        this.setState({commentsAndUsers: result})
+                }    
+            });
+        }else
+            this.setState({redirect: '/log-in'});
     }
     handleChange = (event) => {
 
@@ -53,15 +59,23 @@ class Comments extends Component{
     }
 
     renderComments() {
-        return (this.state.commentsAndUsers.map((commentAndUser, index) => (
-            <div>
-                <Comment key={index} comment={commentAndUser.comment.data} user= {commentAndUser.user.data}/>
+        return (this.state.commentsAndUsers.map((commentAndUser) => (
+            <div key={commentAndUser.comment.data.id}>
+                <Comment comment={commentAndUser.comment.data} user= {commentAndUser.user.data}/>
             </div>
         ))
             
         );
     }
     render(){
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            );     
+        }
         return (
             <div>
                 <HomeBar/>

@@ -1,6 +1,5 @@
 class ReactionsController < ApplicationController
     protect_from_forgery prepend: true
-    #before_action :authorized
     def index 
         begin
             @reactions_users = []

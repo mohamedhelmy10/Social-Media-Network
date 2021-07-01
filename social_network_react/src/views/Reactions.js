@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
-import  HomeBar from './homeBar.js';
 import {getReactions} from '../api/reactions.js'
 import Reaction from '../components/Reaction.js';
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
 
 class Reactions extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            reactionsAndUsers: []
+            reactionsAndUsers: [],
+            redirect:""
         }   
     }
     
     componentDidMount() {
-        const postId = this.props.match.params.postId;
-        let data = getReactions(postId );
-        data.then(result=>{
-            if (result){
-                if(result.error)
-                    alert(result.error);
-                else
-                    this.setState({reactionsAndUsers: result}); 
-            }
-        });
+        if (localStorage.getItem('currUserId')){
+            const postId = this.props.postId;
+            let data = getReactions(postId );
+            data.then(result=>{
+                if (result){
+                    if(result.error)
+                        alert(result.error);
+                    else
+                        this.setState({reactionsAndUsers: result}); 
+                }
+            });
+        }else
+            this.setState({redirect: '/log-in'});
     }
 
 
@@ -33,9 +38,16 @@ class Reactions extends Component{
         ));
     }
     render(){
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            );     
+        }
         return (
             <div>
-                <HomeBar/>
                 {this.renderReaction()}
             </div>
         );

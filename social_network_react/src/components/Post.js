@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import Popup from 'reactjs-popup';
 import { Link } from "react-router-dom";
 import { Nav, Form, Button} from "react-bootstrap";
 import {deletePost} from '../api/posts.js';
 import {updatePost} from '../api/posts.js';
 import {createReaction} from '../api/reactions.js';
+import Reactions from '../views/Reactions.js';
 
 
 class Post extends Component{
@@ -38,14 +40,6 @@ class Post extends Component{
             return { reaction };                                
         })
     }
-    handleChangePost = (event) => {
-        event.preventDefault();
-        this.setState(prevState => {
-            let post = Object.assign({}, prevState.post);
-            post.attributes[event.target.name] = event.target.value; 
-            return { post };                                
-        })
-    }
     handleSubmitReaction= (e)=> {
         e.preventDefault();
         const postId = this.props.post.id;
@@ -56,6 +50,14 @@ class Post extends Component{
                     alert(result.error);  
             }  
         });
+    }
+    handleChangePost = (event) => {
+        event.preventDefault();
+        this.setState(prevState => {
+            let post = Object.assign({}, prevState.post);
+            post.attributes[event.target.name] = event.target.value; 
+            return { post };                                
+        })
     }
     handleUpdatePost= (e)=> {
         e.preventDefault()
@@ -69,14 +71,43 @@ class Post extends Component{
             }
         });
     }
+    renderReactions(){
+        return(
+            <Form.Group controlId="formBasicGender">
+                <Form.Control as="select" name = "reaction_type" onChange={this.handleChangeReaction} style={{ width: 60 }} onClick={this.handleSubmitReaction} >
+                    <option disabled selected value>like</option>
+                    <option>Like</option>
+                    <option>Love</option>
+                    <option>Haha</option>
+                    <option>Care</option>
+                    <option>Sad</option>
+                </Form.Control>
+            </Form.Group>
+        );
+    }
+    renderPopUpReactions(){
+        return(
+            <Popup trigger={<button className="button"> Show Reactions </button>} modal closeOnDocumentClick position="top center" arrow="false">
+                {close => (
+                    <div className="reactionModal">
+                        <button className="close" onClick={close}>
+                            &times;
+                        </button>
+                    <div className="header"> Reactions</div>
+                    <Reactions postId={this.state.post.id}/>
+                </div>
+            )}
+            </Popup>
+        )
+    }
     renderViewOrEditPost(){
-        if(this.state.mode=="view"){
+        if(this.state.mode==="view"){
             return(
                 <div>
                     {this.renderViewPost()}
                 </div>
             );
-        }else if (this.state.mode=="edit"){
+        }else if (this.state.mode==="edit"){
             return(
                 <div>
                     {this.renderEditPost()}
@@ -89,7 +120,7 @@ class Post extends Component{
         const userName = this.props.user.attributes.first_name+" "+this.props.user.attributes.last_name;
         var profilePath;
 
-        if (currUserId == this.props.user.id)
+        if (currUserId === this.props.user.id)
              profilePath = "/profile";
         else
             profilePath = "/profile/"+this.props.user.id;
@@ -104,16 +135,9 @@ class Post extends Component{
                 </div>
             </Nav>
             <div className="buttonsList">
-            <Form.Group controlId="formBasicGender">
-                <Form.Control as="select" name = "reaction_type" onChange={this.handleChangeReaction} style={{ width: 60 }} onClick={this.handleSubmitReaction} >
-                    <option>Like</option>
-                    <option>Love</option>
-                    <option>Haha</option>
-                    <option>Care</option>
-                    <option>Sad</option>
-                </Form.Control>
-            </Form.Group>
-            {this.renderEditDeleteButtons()}
+                {this.renderReactions()}
+                
+                {this.renderEditDeleteButtons()}
             </div>
         </div> 
         );
@@ -134,6 +158,7 @@ class Post extends Component{
                 <Form.Group controlId="formBasicGender" className="button">
                     <Form.Label>Public</Form.Label>
                     <Form.Control as="select" name = "is_public" value= {this.state.post.attributes.is_public} onChange={this.handleChangePost} style={{ width: 60 }}  >
+                        <option disabled selected value>public</option>
                         <option>True</option>
                         <option>False</option>
                     </Form.Control>
@@ -151,8 +176,7 @@ class Post extends Component{
     renderEditDeleteButtons(){
         const currUserId = localStorage.getItem('currUserId');
         const commentsPath = "/posts/"+this.props.post.id+"/comments";
-        const reactionsPath = "/posts/"+this.props.post.id+"/reactions";
-        if (currUserId == this.props.user.id) {
+        if (currUserId === this.props.user.id) {
             return(
                 <div>
                     <Link to={commentsPath}>
@@ -160,11 +184,7 @@ class Post extends Component{
                             Show Comments
                         </Button>
                     </Link>
-                    <Link to={reactionsPath} >
-                        <Button variant="outline-light" size="sm" className="button">
-                            Show Reactions
-                        </Button>
-                    </Link>
+                    {this.renderPopUpReactions()}
                     <Button  variant="outline-light" size="sm" onClick = {this.handleEditClick} className="button">
                         Edit Post
                     </Button>
@@ -181,11 +201,7 @@ class Post extends Component{
                             Show Comments
                         </Button>
                     </Link>
-                    <Link to={reactionsPath} >
-                        <Button variant="outline-light" size="sm" className="button">
-                            Show Reactions
-                        </Button>
-                    </Link>
+                    {this.renderPopUpReactions()}
                 </div>
             );
         }

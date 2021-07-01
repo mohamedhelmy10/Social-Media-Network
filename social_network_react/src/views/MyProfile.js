@@ -4,33 +4,39 @@ import { Form, Button } from "react-bootstrap";
 import  HomeBar from './homeBar.js';
 import {getProfilePosts} from '../api/posts.js';
 import {createPost} from '../api/posts.js';
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
 
 class MyProfile extends Component{
     constructor(props) {
         super(props)
         this.state = {
             postsAndUser: [],
-            post:{}
+            post:{},
+            redirect: ""
         }
     }
 
     componentDidMount() {
-        const userId = localStorage.getItem('currUserId');
-        let data = getProfilePosts(userId);
-        data.then(result=>{
-            if (result){
-                if(result.error)
-                    alert(result.error);
-                else
-                    this.setState({postsAndUser: result}); 
-            }
-        });
+        if (localStorage.getItem('currUserId')){
+            const userId = localStorage.getItem('currUserId');
+            let data = getProfilePosts(userId);
+            data.then(result=>{
+                if (result){
+                    if(result.error)
+                        alert(result.error);
+                    else
+                        this.setState({postsAndUser: result}); 
+                }
+            });
+        }else
+            this.setState({redirect: '/log-in'});
     }
 
     renderPosts() {
         const user = this.state.postsAndUser[0];
         return this.state.postsAndUser.map((post, index) => (
-                (index !=0)&&
+                (index !==0)&&
                 <div>
                     <Post key={index} post={post.data} user = {user.data}/>
                 </div>
@@ -62,6 +68,14 @@ class MyProfile extends Component{
 
 
     render(){
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            );     
+        }
         return (
             <div>
                 <HomeBar/>
@@ -74,6 +88,7 @@ class MyProfile extends Component{
                 <Form.Group controlId="formBasicGender">
                     <Form.Label>Public</Form.Label>
                     <Form.Control as="select" name = "is_public" onChange={this.handleChange} style={{ width: 60 }}>
+                        <option disabled selected value>public</option>
                         <option>True</option>
                         <option>False</option>
                     </Form.Control>
