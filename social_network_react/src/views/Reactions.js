@@ -1,33 +1,53 @@
 import React, { Component } from 'react';
-import  HomeBar from './homeBar.js';
 import {getReactions} from '../api/reactions.js'
 import Reaction from '../components/Reaction.js';
+import { Redirect } from "react-router-dom";
+import Bar from './Bar.js'; 
 
 class Reactions extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            reactionsAndUsers: []
+            reactionsAndUsers: [],
+            redirect:""
         }   
     }
     
     componentDidMount() {
-        const postId = this.props.match.params.postId;
-        getReactions.call(this,postId );
+        if (localStorage.getItem('currUserId')){
+            const postId = this.props.postId;
+            let data = getReactions(postId );
+            data.then(result=>{
+                if (result){
+                    if(result.error)
+                        alert(result.error);
+                    else
+                        this.setState({reactionsAndUsers: result}); 
+                }
+            });
+        }else
+            this.setState({redirect: '/log-in'});
     }
 
 
     renderReaction() {
         return this.state.reactionsAndUsers.map((reactionAndUser, index) => (
             <div>
-                <Reaction key={index} reaction={reactionAndUser.reaction} user= {reactionAndUser.user}/>
+                <Reaction key={index} reaction={reactionAndUser.reaction.data} user= {reactionAndUser.user.data}/>
             </div>
         ));
     }
     render(){
+        if (this.state.redirect) {
+            return(
+                <div>
+                     <Bar/>
+                    <Redirect to={this.state.redirect} />
+                </div>
+            );     
+        }
         return (
             <div>
-                <HomeBar/>
                 {this.renderReaction()}
             </div>
         );
