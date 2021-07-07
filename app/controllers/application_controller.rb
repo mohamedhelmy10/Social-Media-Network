@@ -1,11 +1,8 @@
 class ApplicationController < ActionController::Base
-    helper_method :current_user, :logged_in?
-    #before_action :authorized
-
+    helper_method :current_user
+    before_action :authorized
     def encode_token(payload)
-      rsa_private = OpenSSL::PKey::RSA.generate 2048
-      rsa_public = rsa_private.public_key  
-      JWT.encode(payload, rsa_private, 'RS256')
+      JWT.encode(payload, ENV["HMAC_SECRET"], ENV["ALGORITHM"])
     end
   
     def auth_header
@@ -18,7 +15,7 @@ class ApplicationController < ActionController::Base
         token = auth_header.split(' ')[1]
         # header: { 'Authorization': 'Bearer <token>' }
         begin
-          JWT.decode(token, rsa_public, true, algorithm: 'RS256')
+          JWT.decode(token, ENV["HMAC_SECRET"], true, algorithm: ENV["ALGORITHM"])
         rescue JWT::DecodeError
           nil
         end
@@ -39,22 +36,9 @@ class ApplicationController < ActionController::Base
     def authorized
       render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
     end
-    
-    def current_user   
-        logged_in_user 
+
+    def current_user
+      @user
     end
-
-   # def current_user    
-    #    User.find_by(id: session[:user_id])  
-    #end
-
-    #def logged_in?     
-     #   !current_user.nil?
-    #end
-
-   # def log_out
-    #    session[:user_id] = nil
-    #end
-
-
+    
 end
