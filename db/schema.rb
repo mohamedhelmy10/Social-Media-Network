@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_12_111639) do
+ActiveRecord::Schema.define(version: 2021_07_07_183009) do
 
   create_table "comments", force: :cascade do |t|
     t.text "body"
@@ -31,12 +31,12 @@ ActiveRecord::Schema.define(version: 2021_06_12_111639) do
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "sender_id"
     t.integer "friend_id"
-    t.string "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_invitations_on_user_id"
+    t.index ["sender_id"], name: "index_invitations_on_sender_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 2021_06_12_111639) do
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
+    t.string "password_digest"
     t.string "email"
     t.string "phone_number"
     t.boolean "gender"
@@ -83,7 +84,6 @@ ActiveRecord::Schema.define(version: 2021_06_12_111639) do
     t.text "about_me"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest"
   end
 
 end

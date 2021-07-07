@@ -2,10 +2,12 @@
   "name": "social_network",
   "private": true,
   "proxy": {
-  "/api/v1": {
-  "target": "http://localhost:3000"}
-   },
+    "/api/v1": {
+      "target": "http://localhost:3000"
+    }
+  },
   "dependencies": {
-    "cwd": "^0.10.0"
+    "cwd": "^0.10.0",
+    "reactjs-popup": "^2.0.4"
   }
 }
