@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     has_secure_password
+    has_one_attached :avatar,  :dependent => :destroy
     has_many :posts, :dependent => :destroy
     has_many :sent_requests, class_name: 'Invitation', foreign_key: 'sender_id', :dependent => :destroy
     has_many :received_requests, class_name: 'Invitation', foreign_key: 'receiver_id', :dependent => :destroy

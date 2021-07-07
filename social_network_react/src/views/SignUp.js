@@ -101,7 +101,7 @@ class SignUp extends Component{
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.File id="exampleFormControlFile1" label="Profile Picture" name = "profile_picture" onChange={this.handleChange} />
+                    <Form.File id="exampleFormControlFile1" label="Profile Picture" name = "avatar" onChange={this.handleChange} />
                 </Form.Group>
 
                 <Form.Group controlId="formBasicHometown">
