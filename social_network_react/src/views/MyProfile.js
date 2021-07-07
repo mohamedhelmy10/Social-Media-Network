@@ -34,11 +34,12 @@ class MyProfile extends Component{
     }
 
     renderPosts() {
-        const user = this.state.postsAndUser[0];
+        const length = this.state.postsAndUser.length;
+        const user = this.state.postsAndUser[length-1];
         return this.state.postsAndUser.map((post, index) => (
-                (index !==0)&&
-                <div>
-                    <Post key={index} post={post.data} user = {user.data}/>
+                (index !==length-1)&&
+                <div key={post.id}>
+                    <Post post={post} user = {user.data}/>
                 </div>
         ));
     }
@@ -54,12 +55,12 @@ class MyProfile extends Component{
         e.preventDefault()
         let data = createPost(this.state.post);
         data.then(result=>{
-            if (result){
+            if (result){  
                 if(result.error)
                     alert(result.error);
                 else{
                     var newPostsAndUser = this.state.postsAndUser;
-                    newPostsAndUser.push(result);
+                    newPostsAndUser.unshift(result.post.data);
                     this.setState({postsAndUser: newPostsAndUser, post:{}});
                 }
             }

@@ -34,18 +34,20 @@ class Profile extends Component{
     }
 
     renderPosts() {
-        const user = this.state.postsAndUser[0];
+        const length= this.state.postsAndUser.length
+        const user = this.state.postsAndUser[length-1];
         return this.state.postsAndUser.map((post, index) => (
-                (index !==0)&&
-                <div>
-                    <Post key={index} post={post.data} user = {user.data}/>
+                (index !==length-1)&&
+                <div key={post.id}>
+                    <Post post={post} user = {user.data}/>
                 </div>
         ));
     }
     handleSendClick= (e)=> {
-        const user = this.state.postsAndUser[0].data;
+        const length= this.state.postsAndUser.length
+        const user = this.state.postsAndUser[length-1];
         e.preventDefault();
-        let data = sendFriendRequest(user.id);
+        let data = sendFriendRequest(user.data.id);
         data.then(result=>{
             if (result){
                 if(result.error)

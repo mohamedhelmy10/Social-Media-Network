@@ -2,12 +2,11 @@ class CommentsController < ApplicationController
     protect_from_forgery prepend: true
     def index 
         begin
-            @comments_users = []
             @post = Post.find(params[:post_id])
             if User.are_friends? params[:user_id].to_i, @post.user_id or @post.is_public
                 @comments = @post.comments
-                @comments.each do |comment|
-                    @comments_users.push({comment: CommentSerializer.new(comment), user: UserSerializer.new(comment.user)})
+                @comments_users= @comments.map do |comment|
+                    {comment: CommentSerializer.new(comment), user: UserSerializer.new(comment.user)}
                 end
                 render json: @comments_users
             else
@@ -15,22 +14,6 @@ class CommentsController < ApplicationController
             end
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This post does not exist"} 
-            return
-        end
-    end
-
-    def show
-        begin
-            @comment = Comment.find(params[:id])
-            if @comment.post_id != params[:post_id].to_i
-                render json: {error: "This comment does not belong to this post"}
-            elsif User.are_friends? params[:user_id].to_i, @comment.post.user_id or @comment.post.is_public
-                render json: CommentSerializer.new(@comment)
-            else
-                render json: {error: "You can not see this comment, it is a private post"}
-            end
-        rescue ActiveRecord::RecordNotFound  
-            render json: {error: "This comment does not exist"} 
             return
         end
     end

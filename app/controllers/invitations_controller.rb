@@ -2,9 +2,7 @@ class InvitationsController < ApplicationController
     protect_from_forgery prepend: true
     def index
         begin
-            #current_user
-            @user = User.find(params[:user_id])
-            @friend_requests = @user.received_friend_requests
+            @friend_requests = current_user.received_friend_requests
 
             render json: UserSerializer.new(@friend_requests)
         rescue ActiveRecord::RecordNotFound  
@@ -15,12 +13,11 @@ class InvitationsController < ApplicationController
 
     def create
         begin
-            @user = User.find(params[:user_id])
-            if @user.my_friend?(params[:friend_id].to_i)
+            if User.are_friends? current_user.id, params[:friend_id].to_i
                     render json: {error: "Already friends"}
-            elsif @user.pending_friend?(params[:friend_id].to_i)
+            elsif User.pending_request?(params[:friend_id].to_i, current_user.id)
                     render json: {error: "You have friend request from this user"}
-            elsif @user.pending_request?(params[:friend_id].to_i)
+            elsif User.pending_request?(current_user.id, params[:friend_id].to_i)
                     render json: {error: "Already Sent"}
             else
                 @sent_request = @user.create_friend_request(params[:friend_id].to_i)
@@ -34,7 +31,7 @@ class InvitationsController < ApplicationController
 
     def update
         begin
-            @friend_request = Invitation.pending_invitation(params[:user_id].to_i, params[:id].to_i)
+            @friend_request = Invitation.pending_invitation(current_user.id, params[:id].to_i)
             if @friend_request.empty?
                 render json: {error: "You does not have access to accept this request"}
             elsif @friend_request.update(status: :accepted)
@@ -50,8 +47,7 @@ class InvitationsController < ApplicationController
 
     def friends
         begin
-            @user = User.find(params[:user_id])
-            @my_friends = @user.my_friends
+            @my_friends = current_user.my_friends
             render json: UserSerializer.new(@my_friends)
         rescue  ActiveRecord::RecordNotFound
             render json: {error: "This user does not exist"} 
@@ -61,10 +57,7 @@ class InvitationsController < ApplicationController
 
     def destroy
         begin
-            @friend_request = Invitation.pending_invitation(params[:user_id].to_i, params[:id].to_i)
-            if @friend_request.empty?
-                @friend_request = Invitation.accepted_invitation(params[:user_id].to_i, params[:id].to_i)
-            end   
+            @friend_request = Invitation.not_declined_invitation(current_user.id, params[:id].to_i)
             if @friend_request.empty?
                 render json: {error: "You does not have access to decline this friend"}
             elsif @friend_request.update(status: :declined)

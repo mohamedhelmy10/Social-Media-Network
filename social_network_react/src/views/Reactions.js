@@ -31,9 +31,9 @@ class Reactions extends Component{
 
 
     renderReaction() {
-        return this.state.reactionsAndUsers.map((reactionAndUser, index) => (
-            <div>
-                <Reaction key={index} reaction={reactionAndUser.reaction.data} user= {reactionAndUser.user.data}/>
+        return this.state.reactionsAndUsers.map((reactionAndUser) => (
+            <div key={reactionAndUser.reaction.data.id} >
+                <Reaction reaction={reactionAndUser.reaction.data} user= {reactionAndUser.user.data}/>
             </div>
         ));
     }

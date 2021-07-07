@@ -2,27 +2,23 @@ class PostsController < ApplicationController
     protect_from_forgery prepend: true
     def index
         @posts = Post.all
-        @allowed_posts = []
-
-        @posts.each do |post|
-            if User.are_friends? params[:user_id].to_i, post.user_id or post.is_public 
-                @allowed_posts.push ({post: PostSerializer.new(post), user: UserSerializer.new(post.user)})
-            end
+        @allowed_posts = @posts.select{|post| User.are_friends? current_user.id, post.user_id or post.is_public}.map do |post| 
+            {post: PostSerializer.new(post), user: UserSerializer.new(post.user)}
         end 
         render json: @allowed_posts.reverse
     end
 
     def profile
         begin
-            @user = User.find(params[:id])
-            @posts = []
-            @user.posts.each do |post|
-                if User.are_friends?  params[:user_id].to_i , @user.id or post.is_public
-                    @posts.push PostSerializer.new(post)
-                end
+            @user= User.find(params[:id])       
+            if User.are_friends?  current_user.id, params[:id].to_i
+                @posts= PostSerializer.new(@user.posts).serializable_hash
+            else
+                @posts= PostSerializer.new(@user.posts.where(is_public: true)).serializable_hash
             end
-            @posts.push UserSerializer.new(@user)
-            render json: @posts.reverse
+            @reversed_posts = @posts[:data].reverse
+            @reversed_posts.push UserSerializer.new(@user)
+            render json: @reversed_posts
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist"} 
             return
@@ -32,39 +28,10 @@ class PostsController < ApplicationController
 
     def create
         begin
-            @user = User.find(params[:user_id])
-            @post = @user.posts.create(post_params)
+            @post = current_user.posts.create(post_params)
             render json: {post: PostSerializer.new(@post), user: UserSerializer.new(@post.user)}
         rescue ActiveRecord::RecordNotFound  
             render json: {error: "This user does not exist to add a post"} 
-            return
-        end
-    end   
-
-    def show
-        begin
-            @post = Post.find(params[:id])
-            if User.are_friends?  params[:user_id].to_i, @post.user_id or @post.is_public
-                render json: PostSerializer.new(@post)
-            else
-                render json: {error: "You does not have access to see this post"} 
-            end   
-        rescue ActiveRecord::RecordNotFound  
-            render json: {error: "This post does not exist"} 
-            return
-        end 
-    end
-
-    def new
-        begin
-            @post = Post.find(params[:id])
-            if @post.user_id.to_s == params[:user_id]
-                render json: PostSerializer.new(@post)
-            else
-                render json: {error: "You does not have access to edit this post"}
-            end
-        rescue ActiveRecord::RecordNotFound  
-            render json: {error: "This post does not exist"} 
             return
         end
     end
@@ -72,7 +39,7 @@ class PostsController < ApplicationController
     def update
         begin
             @post = Post.find(params[:id])
-            if @post.user_id.to_s == params[:user_id]
+            if @post.user_id == current_user.id
                 if @post.update(post_params)
                     render json: PostSerializer.new(@post)
                 else   
@@ -90,7 +57,7 @@ class PostsController < ApplicationController
     def destroy
         begin
             @post = Post.find(params[:id])
-            if @post.user_id.to_s == params[:user_id]
+            if @post.user_id == current_user.id
                 @post.destroy
             else
                 render json: {error: "You does not have access to delete this post"}

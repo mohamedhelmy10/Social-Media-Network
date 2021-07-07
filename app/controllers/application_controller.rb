@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
     helper_method :current_user
     before_action :authorized
     def encode_token(payload)
-      JWT.encode(payload, ENV["HMAC_SECRET"], 'HS256')
+      JWT.encode(payload, ENV["HMAC_SECRET"], ENV["ALGORITHM"])
     end
   
     def auth_header
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
         token = auth_header.split(' ')[1]
         # header: { 'Authorization': 'Bearer <token>' }
         begin
-          JWT.decode(token, ENV["HMAC_SECRET"], true, algorithm: 'HS256')
+          JWT.decode(token, ENV["HMAC_SECRET"], true, algorithm: ENV["ALGORITHM"])
         rescue JWT::DecodeError
           nil
         end

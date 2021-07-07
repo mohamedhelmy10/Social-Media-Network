@@ -2,11 +2,6 @@
     protect_from_forgery prepend: true
     before_action :authorized, except: [:create, :login]
 
-  def index
-    @users = User.all
-    render json: UserSerializer.new(@users)
-  end
-
   def create
     @user = User.new(user_params)
     if @user.valid?
@@ -49,10 +44,10 @@
 
   def update
     begin
-      @user = User.find(params[:id])
-      if current_user.id == @user.id 
+      if current_user.id == params[:id].to_i
+        @user = User.find(params[:id])
         if @user.update(user_params)
-            render json: UserSerializer.new(@user)
+          render json: UserSerializer.new(@user)
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -62,13 +57,13 @@
     rescue ActiveRecord::RecordNotFound
       render json: {error: "This user does not exist"} 
       return
-    end     
+    end
   end
 
     def destroy
       begin
-        @user = User.find(params[:id])
-        if current_user.id == @user.id
+        if current_user.id == params[:id].to_i
+          @user = User.find(params[:id])
           @user.destroy
         else
           render json: {error: "You can not delete another user"}
